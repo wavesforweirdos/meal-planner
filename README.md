@@ -1,6 +1,7 @@
 # MEAL PLANNER
 
-> Meal planner with recipes sourced from Spoonacular API ||  FrontEnd - IT Hackathon en JOBarcelona'23.
+> Meal planner with recipes sourced from Spoonacular API
+> FrontEnd - IT Hackathon en JOBarcelona'23.
 
 **[![CodeFactor](https://www.codefactor.io/repository/github/wavesforweirdos/photo-gallery/badge)](https://www.codefactor.io/repository/github/wavesforweirdos/photo-gallery)**
 
