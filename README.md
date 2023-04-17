@@ -5,6 +5,12 @@
 > FrontEnd - IT Hackathon en JOBarcelona'23.
 
 **[![CodeFactor](https://www.codefactor.io/repository/github/wavesforweirdos/meal-planner/badge)](https://www.codefactor.io/repository/github/wavesforweirdos/meal-planner)**
+**[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=wavesforweirdos_meal-planner&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=wavesforweirdos_meal-planner)**
+**[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=wavesforweirdos_meal-planner&metric=bugs)](https://sonarcloud.io/summary/new_code?id=wavesforweirdos_meal-planner)**
+**[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=wavesforweirdos_meal-planner&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=wavesforweirdos_meal-planner)**
+**[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=wavesforweirdos_meal-planner&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=wavesforweirdos_meal-planner)**
+**[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=wavesforweirdos_meal-planner&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=wavesforweirdos_meal-planner)**
+**[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=wavesforweirdos_meal-planner&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=wavesforweirdos_meal-planner)**
 **[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=wavesforweirdos_meal-planner&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=wavesforweirdos_meal-planner)**
 
 ## Installation
