@@ -1,0 +1,148 @@
+@use "../custom" as *;
+
+@mixin cardsOpen() {
+  .recipe-information {
+    transform: translateY(0px);
+  }
+}
+:root {
+  --caloriesColor: var(--blue);
+  --fatColor: var(--yellow);
+  --carbohydratesColor: var(--green);
+  --sugarColor: var(--pink);
+  --proteinColor: var(--purple);
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+p {
+  margin: 0;
+}
+
+.recipes {
+  width: 40vw ;
+  .search-form-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    list-style: none;
+    padding: 0;
+
+    text-align: center;
+
+    .recipe-card {
+      position: relative;
+      flex: 1 1 150px;
+      height: 200px;
+
+      margin: 5px;
+      border-radius: 0.5rem;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+      align-items: center;
+
+      font-weight: 500;
+      font-size: 55%;
+      line-height: 1;
+
+      overflow: hidden;
+
+      background-position: center;
+      background-size: cover;
+
+      transition: 0.3s;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        background: rgba(10, 72, 112, 0);
+
+        transition: 0.3s;
+      }
+
+      .recipe {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 10px 10px;
+        width: 80%;
+        max-width: 200px;
+      }
+
+      .recipe-title {
+        border-bottom-left-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
+      }
+
+      .recipe-information {
+        transform: translateY(300px);
+        transition: 0.3s;
+        text-align: center;
+        color: #00000090;
+
+        border-top: 1px dashed #976fe825;
+        border-radius: 0.6rem;
+
+        .nutrition {
+          line-height: 1.2;
+          .calories {
+            color: var(--caloriesColor);
+          }
+          .fat {
+            color: var(--fatColor);
+          }
+          .carbohydrates {
+            color: var(--carbohydratesColor);
+          }
+          .sugar {
+            color: var(--sugarColor);
+          }
+          .protein {
+            color: var(--proteinColor);
+          }
+        }
+
+        .price {
+          color: #000000;
+          border-top: 1px dashed #976fe825;
+          margin-top: 0.5rem;
+          padding-top: 0.5rem;
+        }
+        .info-name {
+          float: left;
+        }
+        .info-units {
+          text-align: right;
+        }
+      }
+
+      &:hover {
+        @include cardsOpen();
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    ul {
+      .recipe-card {
+        @include cardsOpen();
+      }
+    }
+  }
+}

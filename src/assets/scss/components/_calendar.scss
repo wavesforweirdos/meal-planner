@@ -1,0 +1,138 @@
+@use "../custom" as *;
+
+:root {
+  --numDays: 7;
+  --numHours: 12;
+  --timeHeight: 20px;
+  --calBgColorWeek: var(--cool-gray);
+  --calBgColorWeekend: var(--light-gray);
+  --eventBorderColor: var(--gray-dark);
+
+  --mealColor: var(--light);
+}
+
+.calendar-container {
+  padding: 7rem 0;
+  text-align: center;
+  font-weight: 400;
+}
+
+.calendar-title,
+.recipe-title {
+  padding: 5rem;
+  text-align: center;
+}
+
+.orange {
+  background-color: rgba(255, 166, 0, 0.1);
+}
+
+.py-5 {
+  padding-top: 7rem !important;
+  padding-bottom: 7rem !important;
+}
+
+.calendar {
+  width: 50vw;
+  display: flex;
+  gap: 10px;
+
+  .timeline {
+    display: grid;
+    width: 40px;
+    grid-template-rows: repeat(var(--numHours), var(--timeHeight));
+    gap: 10px;
+    align-items: end;
+    align-content: space-evenly;
+    justify-items: start;
+    font-size: 60%;
+    text-align: right;
+    opacity: 70%;
+  }
+
+  .days {
+    flex-grow: 10;
+    display: grid;
+    grid-template-columns: repeat(var(--numDays), minmax(50px, 1fr));
+    grid-template-rows: repeat(var(--numHours), var(--timeHeight));
+    gap: 10px 5px;
+    align-content: space-evenly;
+
+    .day {
+      grid-row-start: 1;
+      grid-row-end: --numHours;
+
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  .space,
+  .date {
+    height: 45px;
+  }
+
+  .date {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    font-weight: 100;
+
+    .date-num,
+    .date-day {
+      display: inline;
+      font-size: 1.5rem;
+    }
+
+    .date-num {
+      font-weight: 600;
+    }
+  }
+
+  .events {
+    flex: 100%;
+    display: flex;
+    flex-direction: column;
+    align-content: space-evenly;
+    background: var(--calBgColorWeek);
+    border-radius: 5px;
+
+    padding: 0.4rem;
+  }
+
+  .grow-1 {
+    flex-grow: 2;
+  }
+
+  .sat > .events,
+  .sun > .events {
+    background: var(--calBgColorWeekend);
+  }
+
+  //Food event
+  .event {
+    flex-grow: 2;
+    border: 1px dashed var(--eventBorderColor);
+    border-radius: 5px;
+    background: var(--light);
+    width: 100%;
+    margin-bottom: 0.5rem;
+
+    &:last-child {
+      margin-bottom: 0rem;
+    }
+
+    .title {
+      font-weight: 500;
+      font-size: small;
+      padding: 0.5rem;
+    }
+  }
+
+  .dinner,
+  .snack {
+    flex-grow: 4;
+  }
+}

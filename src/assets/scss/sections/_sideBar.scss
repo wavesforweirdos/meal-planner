@@ -1,0 +1,22 @@
+.w3-bar-block .w3-bar-item {
+  padding: 20px;
+}
+
+#mySideBar {
+  display: none;
+  z-index: 2;
+  width: 40%;
+  min-width: 300px;
+}
+
+.w3-bar-item {
+  background-color: transparents !important;
+  &:hover {
+    background-color: orange !important;
+    color: white !important;
+  }
+}
+
+#menu {
+  background-color: orange;
+}

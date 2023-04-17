@@ -1,0 +1,56 @@
+.navigationButtons {
+  width: 100%;
+  padding: 0px 20%;
+
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0;
+}
+
+.navigationButtons a {
+  width: 100%;
+  padding: 12px 15px;
+  border-top: 1px solid #575756;
+  border-bottom: 1px solid #575756;
+  background-color: transparent;
+
+  text-decoration: none;
+  font-size: small;
+  letter-spacing: 0.1em;
+  color: #575756;
+
+  transition: 400ms ease;
+}
+
+.navigationButtons a:hover {
+  background-color: rgba(255, 166, 0, 0.486);
+}
+
+.navigationActive a {
+  background-color: orange;
+}
+
+.navigationDisabled a {
+  color: rgba(151, 140, 118, 0.253);
+  &:hover {
+    background-color: rgba(151, 140, 118, 0.253);
+  }
+}
+
+.previousButton {
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+  border: 1px solid #575756;
+  border-right: 0px;
+
+  padding-left: 1.5rem !important;
+}
+
+.nextButton {
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  border: 1px solid #575756;
+  border-left: 0px;
+
+  padding-right: 1.5rem !important;
+}

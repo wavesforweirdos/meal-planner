@@ -1,0 +1,36 @@
+:root {
+  --black: #000000;
+  --dark-gray: #2d303c;
+  --light-gray: #ede9e68a;
+  --gray: #8d8d91;
+  --cool-gray: #e7e3e0d3;
+  --light: #fafafa;
+  --white: #f9f8f7;
+
+  --blue: #1a81e0e5;
+  --purple: #976fe8;
+  --yellow: #daa90b;
+  --green: #3daa7d;
+  --pink: #e86fc0;
+  --orange: #f0754f;
+  --red: #d64848;
+}
+
+.column-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+.row-center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+//-------------- IMPORT BOOTSTRAP 5 --------------//
+
+@import "../../../node_modules/bootstrap/scss/bootstrap.scss";

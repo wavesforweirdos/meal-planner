@@ -1,0 +1,16 @@
+// @use "custom";
+
+//-------------- import ALL COMPONENTS --------------//
+
+@use "components/calendar";
+@use "components/recipes";
+@use "components/mealCard";
+@use "components/searchBar";
+@use "components/recipeModal";
+
+
+//-------------- import ALL SECTIONS --------------//
+
+@use "sections/sideBar";
+@use "sections/app";
+@use "sections/pagination";
