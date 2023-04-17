@@ -4,7 +4,7 @@
 > 
 > FrontEnd - IT Hackathon en JOBarcelona'23.
 
-**[![CodeFactor](https://www.codefactor.io/repository/github/wavesforweirdos/photo-gallery/badge)](https://www.codefactor.io/repository/github/wavesforweirdos/photo-gallery)**
+**[![CodeFactor](https://www.codefactor.io/repository/github/wavesforweirdos/meal-planner/badge)](https://www.codefactor.io/repository/github/wavesforweirdos/meal-planner)**
 
 ## Installation
 
