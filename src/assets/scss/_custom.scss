@@ -16,6 +16,10 @@
   --red: #d64848;
 }
 
+//-------------- IMPORT BOOTSTRAP 5 --------------//
+
+@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+
 .column-center {
   display: flex;
   flex-direction: column;
@@ -30,7 +34,3 @@
   align-items: center;
   gap: 0.5rem;
 }
-
-//-------------- IMPORT BOOTSTRAP 5 --------------//
-
-@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
