@@ -5,6 +5,7 @@
 > FrontEnd - IT Hackathon en JOBarcelona'23.
 
 **[![CodeFactor](https://www.codefactor.io/repository/github/wavesforweirdos/meal-planner/badge)](https://www.codefactor.io/repository/github/wavesforweirdos/meal-planner)**
+**[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=wavesforweirdos_meal-planner&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=wavesforweirdos_meal-planner)**
 
 ## Installation
 
