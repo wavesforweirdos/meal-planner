@@ -1,3 +1,7 @@
+//-------------- IMPORT BOOTSTRAP 5 --------------//
+
+@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+
 :root {
   --black: #000000;
   --dark-gray: #2d303c;
@@ -16,9 +20,6 @@
   --red: #d64848;
 }
 
-//-------------- IMPORT BOOTSTRAP 5 --------------//
-
-@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
 
 .column-center {
   display: flex;

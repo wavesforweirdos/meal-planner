@@ -1,21 +1,4 @@
 @charset "UTF-8";
-:root {
-  --black: #000000;
-  --dark-gray: #2d303c;
-  --light-gray: #ede9e68a;
-  --gray: #8d8d91;
-  --cool-gray: #e7e3e0d3;
-  --light: #fafafa;
-  --white: #f9f8f7;
-  --blue: #1a81e0e5;
-  --purple: #976fe8;
-  --yellow: #daa90b;
-  --green: #3daa7d;
-  --pink: #e86fc0;
-  --orange: #f0754f;
-  --red: #d64848;
-}
-
 /*!
  * Bootstrap  v5.2.3 (https://getbootstrap.com/)
  * Copyright 2011-2022 The Bootstrap Authors
@@ -10786,6 +10769,23 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+:root {
+  --black: #000000;
+  --dark-gray: #2d303c;
+  --light-gray: #ede9e68a;
+  --gray: #8d8d91;
+  --cool-gray: #e7e3e0d3;
+  --light: #fafafa;
+  --white: #f9f8f7;
+  --blue: #1a81e0e5;
+  --purple: #976fe8;
+  --yellow: #daa90b;
+  --green: #3daa7d;
+  --pink: #e86fc0;
+  --orange: #f0754f;
+  --red: #d64848;
+}
+
 .column-center {
   display: flex;
   flex-direction: column;
