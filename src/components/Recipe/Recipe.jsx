@@ -4,24 +4,11 @@ import RecipeModal from "./RecipeModal";
 import ReactPaginate from "react-paginate";
 
 import { RecipeContext } from "../../context/RecipeContext";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 function Recipe() {
-  const { data } = useContext(RecipeContext);
-
-  const [page, setPage] = useState(0);
-  const recipesPerPage = 6;
-  const numberOfRecipesVistited = page * recipesPerPage;
-
-  const totalPages = Math.ceil(data.length / recipesPerPage);
-  const changePage = ({ selected }) => {
-    setPage(selected);
-  };
-
-  const displayRecipes = data.slice(
-    numberOfRecipesVistited,
-    numberOfRecipesVistited + recipesPerPage
-  );
+  const { displayRecipes, totalPages, changePage } =
+    useContext(RecipeContext);
 
   return (
     <div id="recipes" className="recipes column-center">

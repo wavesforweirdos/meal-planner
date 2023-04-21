@@ -4,20 +4,18 @@ import { RecipeContext } from "../../context/RecipeContext";
 import RecipeCard from "./RecipeCard";
 
 function RecipeList({ recipes }) {
-  if (recipes != null) {
-    return (
-      <>
-        <div className="recipe-container">
-          <ul>
-            {recipes &&
-              recipes.map((recipe, index) => (
-                <RecipeCard key={index} recipe={recipe} />
-              ))}
-          </ul>
-        </div>
-      </>
-    );
-  }
+  return (
+    <>
+      <div className="recipe-container">
+        <ul>
+          {recipes &&
+            recipes.map((recipe, index) => (
+              <RecipeCard key={index} recipe={recipe}/>
+            ))}
+        </ul>
+      </div>
+    </>
+  );
 }
 
 export default RecipeList;

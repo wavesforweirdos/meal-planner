@@ -7,6 +7,7 @@ import { EventStyled } from "../styled";
 function MealContainer(props) {
   const { data } = useContext(RecipeContext);
 
+  const [dataContainer, setDataContainer] = useState(data);
   const [box, setBox] = useState([]);
   const [{ isOver }, dropRef] = useDrop(() => ({
     accept: "recipeCard",
@@ -17,11 +18,22 @@ function MealContainer(props) {
     }),
   }));
 
-  const realData = data;
+  useEffect(() => {
+    return () => {
+      setDataContainer(data);
+    };
+  }, []);
 
   const addRecipeToCard = (item) => {
-    const recipeList = realData.filter((recipe) => item.id === recipe.id);
+    console.log("item", item.id);
+
+    const recipeList = dataContainer.filter((recipe) => item.id == recipe.id);
     setBox((box) => [...box, recipeList[0]]);
+  };
+
+  const deleteRecipeFromCard = (item) => {
+    const recipeList = dataContainer.filter((recipe) => item.id != recipe.id);
+    setBox((box) => [...box, recipeList]);
   };
 
   const classPlaceholder = "event column-center " + props.type;
@@ -30,13 +42,6 @@ function MealContainer(props) {
     <EventStyled
       ref={dropRef}
       className={box.length == 0 ? classPlaceholder : classMeal}
-      span={
-        box.length != 0
-          ? box.length + 1
-          : props.type != "dinner"
-          ? "2"
-          : box.length + 4
-      }
     >
       {box.length == 0 && (
         <div className="meal-placeholder">{props.placeholder}</div>

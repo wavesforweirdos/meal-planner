@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { RecipeContext } from "../../context/RecipeContext";
 
 function SearchBar() {
-  const { data, setDataFiltered } = useContext(RecipeContext);
+  const { searchRecipes, resetData } = useContext(RecipeContext);
   const [query, setQuery] = useState("");
 
   const searchQuery = (e) => {
@@ -10,9 +10,20 @@ function SearchBar() {
     setQuery(e.target.value);
 
     if (query !== "") {
-      setDataFiltered(query);
+      searchRecipes(query);
     }
+
+    const keyDownHandler = (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        resetData();
+        return (e.target.value = "");
+      }
+      document.removeEventListener("keydown", keyDownHandler);
+    };
+    document.addEventListener("keydown", keyDownHandler);
   };
+
   return (
     <div className="search-form-container">
       <form className="search-form">

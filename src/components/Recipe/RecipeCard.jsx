@@ -1,32 +1,14 @@
+import { useContext } from "react";
 import { useDrag } from "react-dnd";
-import { BackgroundCardStyled } from "../styled";
 
 import { RecipeContext } from "../../context/RecipeContext";
-import { useContext, useState, useEffect } from "react";
-
-import { queryRecipeById, options } from "../../data/recipe";
+import { BackgroundCardStyled } from "../styled";
 
 function RecipeCard({ recipe }) {
   const { showModal } = useContext(RecipeContext);
-  const url = queryRecipeById + recipe.id;
-  const [actualRecipe, setActualRecipe] = useState(recipe);
-
-  useEffect(() => {
-    const getRecipeData = async () => {
-      try {
-        const res = await fetch(url, options);
-        let actualData = await res.json();
-        setActualRecipe(actualData[0]);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getRecipeData();
-  }, []);
-
   const [{ isDragging }, dragRef] = useDrag(() => ({
     type: "recipeCard",
-    item: { id: actualRecipe.id },
+    item: { id: recipe.id },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -36,27 +18,29 @@ function RecipeCard({ recipe }) {
     <>
       <BackgroundCardStyled
         ref={dragRef}
-        imageUrl={actualRecipe.image}
+        imageUrl={recipe.image}
         className="recipe-card"
-        id={actualRecipe.id}
+        id={recipe.id}
         style={{ opacity: isDragging ? "50%" : "100%" }}
         draggable
-        onClick={() => showModal(actualRecipe)}
+        onClick={() => {
+          showModal(recipe);
+        }}
       >
         <div className="recipe recipe-title">
           <p className="title">
-            {actualRecipe.title &&
-              actualRecipe.title.replace(/\s*\(.*?\)\s*/g, "").toUpperCase()}
+            {recipe.title &&
+              recipe.title.replace(/\s*\(.*?\)\s*/g, "").toUpperCase()}
           </p>
         </div>
         <div className="recipe recipe-information">
           <div className="container">
             <div className="info time">
-              <p>Ready in {actualRecipe.readyInMinutes} min</p>
+              <p>Ready in {recipe.readyInMinutes} min</p>
             </div>
             <div className="nutrition">
-              {actualRecipe.nutrition &&
-                actualRecipe.nutrition.nutrients.map((nutrient) => {
+              {recipe.nutrition &&
+                recipe.nutrition.nutrients.map((nutrient) => {
                   if (
                     nutrient.name == "Calories" ||
                     nutrient.name == "Carbohydrates" ||
@@ -95,7 +79,7 @@ function RecipeCard({ recipe }) {
             </div>
             <div className="price info">
               <div className="info-name">Price</div>
-              <div className="info-units">${actualRecipe.pricePerServing}</div>
+              <div className="info-units">${recipe.pricePerServing}</div>
             </div>
           </div>
         </div>
