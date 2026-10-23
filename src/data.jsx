@@ -1,9 +1,3 @@
-const apiKey = "2ebcbe4ee41f466ca81413d963a1a0d2";
-const urlRandomRecipes =
-  "https://api.spoonacular.com/recipes/random?limitLicense=true&includeNutrition=true&number=36&";
-const urlRecipeById =
-  "https://api.spoonacular.com/recipes/informationBulk?&includeNutrition=true&";
-
 const urlSearchRecipe =
   "https://api.spoonacular.com/recipes/complexSearch?instructionsRequired=true&fillIngredients=true&addRecipeInformation=true&addRecipeNutrition=true&number=36&limitLicense=true&";
 
@@ -13,9 +7,11 @@ export const options = {
     "Content-Type": "application/json",
   },
 };
-export const queryRandomRecipes = `${urlRandomRecipes}apiKey=${apiKey}`;
-export const queryRecipeById = `${urlRecipeById}apiKey=${apiKey}&ids=`;
-export const querySearchRecipe = `${urlSearchRecipe}apiKey=${apiKey}&query=`;
+
+// La clave la aporta quien visita la web (se guarda solo en su navegador);
+// el repositorio no incluye ninguna.
+export const buildSearchUrl = (apiKey, query) =>
+  `${urlSearchRecipe}apiKey=${encodeURIComponent(apiKey)}&query=${encodeURIComponent(query)}`;
 
 export const defaultRecipeBook = [
   {

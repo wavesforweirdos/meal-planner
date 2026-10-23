@@ -1,0 +1,3966 @@
+// ---------------------------------------------------------------------------
+// Tokens
+// ---------------------------------------------------------------------------
+:root {
+  color-scheme: light;
+
+  --page: #0d0d0f;
+  --rail: #17171a;
+  --card: #ffffff;
+  --ink: #111113;
+  --muted: #62626b;
+  --line: #ececf0;
+  --soft: #f3f3f7;
+
+  --lime: #e3fb5f;
+  --lime-deep: #c6e24c;
+  --lavender: #b8a9f3;
+  --violet: #6652d9;
+  --on-lime: #111113;
+  --on-ink: #ffffff;
+
+  // Un color por franja: lo comparten el calendario, las tarjetas y los diálogos.
+  --breakfast: #ecfa9a;
+  --lunch: #c9e4f0;
+  --snack: #f8cdee;
+  --dinner: #d4c9f8;
+
+  --grad: linear-gradient(135deg, #e3fb5f 0%, #c4e1e8 48%, #c3b8f6 100%);
+  --shadow: 0 1px 6px rgba(17, 17, 19, 0.14);
+
+  --ink-hover: #34343a;
+  --chip-hover: #e8e8ee;
+  --rail-btn: #26262b;
+  --rail-btn-hover: #34343a;
+  --rail-text: #c9c9d1;
+  --footer: #8c8c96;
+  --tile: rgba(255, 255, 255, 0.4);
+  --tile-strong: rgba(255, 255, 255, 0.6);
+  --ink-soft: rgba(17, 17, 19, 0.7);
+  --line-strong: rgba(17, 17, 19, 0.12);
+
+  // Una sola tipografía para toda la aplicación.
+  --font-display: "Manrope Variable", system-ui, sans-serif;
+  --font-body: "Manrope Variable", system-ui, sans-serif;
+  --radius: 24px;
+  --gutter: clamp(1rem, 2.2vw, 1.75rem);
+}
+
+// Modo oscuro: gris muy oscuro con los mismos acentos vivos.
+@mixin dark-tokens {
+  color-scheme: dark;
+
+  --page: #0a0a0b;
+  --rail: #111113;
+  --card: #18181b;
+  --ink: #f4f4f6;
+  --muted: #a5a5af;
+  --line: #2a2a31;
+  --soft: #232328;
+  --violet: #a99bf5;
+  --on-ink: #111113;
+
+  --breakfast: #46531a;
+  --lunch: #1e4455;
+  --snack: #5c2c51;
+  --dinner: #3f3578;
+
+  --grad: linear-gradient(135deg, #46531a 0%, #1d3b47 50%, #2f2870 100%);
+  --shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+
+  --ink-hover: #d8d8de;
+  --chip-hover: #2e2e35;
+  --rail-btn: #1f1f23;
+  --rail-btn-hover: #2c2c32;
+  --footer: #7d7d88;
+  --tile: rgba(255, 255, 255, 0.1);
+  --tile-strong: rgba(255, 255, 255, 0.18);
+  --ink-soft: rgba(244, 244, 246, 0.72);
+  --line-strong: rgba(255, 255, 255, 0.14);
+}
+
+// Sigue al sistema, salvo que se haya elegido tema a mano (data-theme).
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    @include dark-tokens;
+  }
+}
+
+:root[data-theme="dark"] {
+  @include dark-tokens;
+}
+
+// ---------------------------------------------------------------------------
+// Base
+// ---------------------------------------------------------------------------
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--card);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+
+  @media (min-width: 700px) {
+    background: var(--page);
+  }
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol {
+  margin: 0;
+}
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+img,
+svg {
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+:focus-visible {
+  outline: 3px solid var(--violet);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.visually-hidden {
+  @include visually-hidden;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  background: var(--lime);
+  color: var(--on-lime);
+  font-weight: 600;
+  transform: translateY(-200%);
+
+  &:focus {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Botones de icono, chips y piezas pequeñas
+// ---------------------------------------------------------------------------
+.icon-btn {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  color: var(--ink);
+  transition: background-color 0.2s;
+
+  &:hover:not(:disabled) {
+    background: var(--soft);
+  }
+
+  &--dark {
+    background: var(--ink);
+    color: var(--on-ink);
+
+    &:hover:not(:disabled) {
+      background: var(--ink-hover);
+    }
+  }
+
+  // Estado "activo" (por ejemplo, receta ya añadida).
+  &--on {
+    background: var(--lime);
+    color: var(--on-lime);
+
+    &:hover:not(:disabled) {
+      background: var(--lime-deep);
+    }
+  }
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  min-height: 2.25rem;
+  padding: 0.25rem 0.9rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--soft);
+  font-size: 0.875rem;
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover {
+    background: var(--chip-hover);
+  }
+
+  &[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--on-ink);
+  }
+
+  &--icon {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+  }
+}
+
+.notice {
+  margin-top: 0.75rem;
+  padding: 0.6rem 1rem;
+  border-radius: 14px;
+  background: var(--snack);
+  font-size: 0.875rem;
+}
+
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.section-sub {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  max-width: 46ch;
+}
+
+// ---------------------------------------------------------------------------
+// Estructura: marco oscuro, barra lateral de iconos y panel blanco
+// ---------------------------------------------------------------------------
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  @media (min-width: 700px) {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    grid-template-rows: 1fr auto;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+}
+
+main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--card);
+
+  @media (min-width: 700px) {
+    grid-column: 2;
+    grid-row: 1;
+    border-radius: 26px;
+    overflow: hidden;
+  }
+}
+
+.view {
+  flex: 1;
+  padding: var(--gutter);
+}
+
+.site-header {
+  @media (min-width: 700px) {
+    position: sticky;
+    top: 1rem;
+    grid-row: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    height: calc(100dvh - 2rem);
+    padding: 0.75rem 0;
+    border-radius: 24px;
+    background: var(--rail);
+  }
+
+  .brand {
+    display: none;
+
+    @media (min-width: 700px) {
+      display: block;
+    }
+  }
+
+  .brand__mark {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 15px;
+    background: var(--lavender);
+    color: var(--on-lime);
+  }
+
+  nav ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  // Interruptor claro/oscuro al pie de la barra (solo escritorio).
+  .theme-toggle {
+    display: none;
+    margin-top: auto;
+    background: var(--rail-btn);
+    box-shadow: none;
+    color: #fff;
+
+    &:hover:not(:disabled) {
+      background: var(--rail-btn-hover);
+    }
+
+    @media (min-width: 700px) {
+      display: inline-grid;
+    }
+  }
+
+  nav a {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: var(--rail-btn);
+    color: #fff;
+    text-decoration: none;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background: var(--rail-btn-hover);
+    }
+
+    &[aria-current="page"] {
+      background: var(--lime);
+      color: var(--on-lime);
+    }
+  }
+
+  // En escritorio solo icono (el nombre queda en el tooltip y en el lector).
+  .nav-label {
+    @include visually-hidden;
+  }
+
+  .count {
+    position: absolute;
+    top: -0.15rem;
+    right: -0.15rem;
+    display: grid;
+    place-items: center;
+    min-width: 1.25rem;
+    height: 1.25rem;
+    padding: 0 0.3rem;
+    border-radius: 999px;
+    background: var(--lavender);
+    color: var(--on-lime);
+    font-size: 0.6875rem;
+    font-weight: 700;
+  }
+
+  // Móvil: barra flotante inferior oscura con icono y texto.
+  @media (max-width: 699px) {
+    nav {
+      position: fixed;
+      inset: auto 0.5rem calc(0.5rem + env(safe-area-inset-bottom)) 0.5rem;
+      z-index: 25;
+      border-radius: 22px;
+      background: var(--rail);
+      box-shadow: 0 8px 28px rgba(13, 13, 15, 0.35);
+    }
+
+    nav ul {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      flex-direction: row;
+      gap: 0;
+    }
+
+    nav a {
+      width: auto;
+      height: auto;
+      min-height: 3.25rem;
+      padding: 0.35rem 0.25rem;
+      border-radius: 22px;
+      background: transparent;
+      color: var(--rail-text);
+      font-size: 0.6875rem;
+      font-weight: 600;
+      grid-template-rows: auto auto;
+      gap: 0.05rem;
+
+      &:hover {
+        background: transparent;
+      }
+
+      &[aria-current="page"] {
+        background: transparent;
+        color: var(--lime);
+      }
+    }
+
+    .nav-label {
+      position: static;
+      width: auto;
+      height: auto;
+      margin: 0;
+      overflow: visible;
+      clip-path: none;
+      text-transform: lowercase;
+    }
+
+    .nav-icon svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    .count {
+      top: 0.2rem;
+      right: calc(50% - 1.5rem);
+      min-width: 1rem;
+      height: 1rem;
+      font-size: 0.625rem;
+    }
+  }
+}
+
+.site-footer {
+  padding: 1rem var(--gutter);
+  color: var(--muted);
+  font-size: 0.8125rem;
+  text-align: center;
+
+  @media (min-width: 700px) {
+    grid-column: 2;
+    grid-row: 2;
+    padding: 0.25rem 0 0;
+    color: var(--footer);
+  }
+}
+
+// En el plan no se muestra nada bajo la semana.
+.app:has(.planner) .site-footer {
+  display: none;
+}
+
+// Móvil: deja sitio a la barra de navegación fija y estira el panel del plan.
+@media (max-width: 699px) {
+  .view {
+    padding-bottom: calc(var(--gutter) + 4.5rem);
+  }
+
+  .site-footer {
+    padding-bottom: 5.5rem;
+  }
+
+  .planner__main {
+    min-height: calc(100dvh - 2 * var(--gutter) - 4.5rem);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Plan
+//   < 700px   estilo calendario de iOS: dos días a la vista y desplazamiento
+//             horizontal (sin barra); el panel es una hoja inferior
+//   ≥ 700px   siete columnas; el panel va debajo del calendario
+//   ≥ 1100px  el panel queda a la derecha, siempre visible
+// ---------------------------------------------------------------------------
+.planner {
+  display: grid;
+  gap: 1rem;
+  background: var(--grad);
+
+  @media (min-width: 1100px) {
+    grid-template-columns: minmax(0, 1fr) 23rem;
+    align-items: start;
+  }
+}
+
+.planner__main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  @media (min-width: 700px) {
+    min-height: calc(100dvh - 4.25rem - 2 * var(--gutter));
+  }
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.9rem;
+
+  &__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+}
+
+// Tira de días (solo móvil): salta a un día y marca los dos visibles.
+.strip {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  margin-bottom: 0.5rem;
+
+  &__day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+    padding: 0.3rem 0;
+    border: 0;
+    border-radius: 16px;
+    background: transparent;
+    color: var(--ink-soft);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    &--visible {
+      background: var(--tile);
+      color: var(--ink);
+    }
+  }
+
+  &__num {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--ink);
+    text-transform: none;
+  }
+
+  &__day--today &__num {
+    background: var(--ink);
+    color: var(--on-ink);
+  }
+}
+
+// Calendario: la cuadrícula va sobre un panel blanco que empieza bajo las
+// fichas de los días.
+.cal__wrap {
+  --head: 2.5rem;
+  --gap: 0.25rem;
+
+  --rowlabel: 2.75rem;
+  --row-min: 5rem;
+
+  position: relative;
+  display: grid;
+  flex: 1;
+  grid-template-columns: var(--rowlabel) minmax(0, 1fr);
+  column-gap: var(--gap);
+  min-height: 22rem;
+
+  @media (min-width: 700px) {
+    --head: 4rem;
+    --gap: 0.5rem;
+    --rowlabel: 3.25rem;
+    --row-min: 6.5rem;
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: calc(var(--head) + var(--gap)) 0 0 0;
+    border-radius: 24px;
+    background: var(--card);
+  }
+}
+
+.cal {
+  // Cada día ocupa la mitad del ancho restante: así se ven dos a la vez.
+  --colw: calc(
+    (100vw - 2 * var(--gutter) - var(--rowlabel) - 2 * var(--gap)) / 2
+  );
+
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(7, var(--colw));
+  grid-template-rows: var(--head) repeat(var(--rows), minmax(var(--row-min), 1fr));
+  gap: var(--gap);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: 700px) {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  // Columna de franjas: fuera del área desplazable, así lo que se desliza se
+  // recorta limpio en su borde y no queda nada visible debajo de ella.
+  &__labels {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-rows: var(--head) repeat(var(--rows), minmax(var(--row-min), 1fr));
+    gap: var(--gap);
+  }
+
+  // Ficha de la esquina con el número de semana (como el "GMT" de la referencia).
+  &__corner {
+    display: grid;
+    place-items: center;
+    height: var(--head);
+    border-radius: 16px;
+    background: var(--lime);
+    color: var(--on-lime);
+    font-size: 0.75rem;
+    font-weight: 700;
+
+    @media (min-width: 700px) {
+      border-radius: 20px;
+      font-size: 0.875rem;
+    }
+  }
+
+  // Cada franja se reconoce por su icono (el nombre va en el tooltip).
+  &__rowlabel {
+    display: grid;
+    place-items: center;
+    background: var(--card);
+
+    // Solo las esquinas del panel son redondeadas.
+    &:nth-child(2) {
+      border-top-left-radius: 24px;
+    }
+
+    &:last-child {
+      border-bottom-left-radius: 24px;
+    }
+
+    span {
+      display: grid;
+      place-items: center;
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 50%;
+      color: var(--ink);
+    }
+
+    &--breakfast span {
+      background: var(--breakfast);
+    }
+    &--lunch span {
+      background: var(--lunch);
+    }
+    &--snack span {
+      background: var(--snack);
+    }
+    &--dinner span {
+      background: var(--dinner);
+    }
+  }
+}
+
+.daycol {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span var(--span);
+  gap: inherit;
+  scroll-snap-align: start;
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    height: var(--head);
+    border-radius: 16px;
+    background: transparent;
+    color: var(--ink);
+    line-height: 1;
+
+    @media (min-width: 700px) {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      border-radius: 20px;
+      line-height: 1.1;
+    }
+  }
+
+  &__name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: lowercase;
+    color: var(--ink-soft);
+
+    @media (min-width: 700px) {
+      font-size: 0.875rem;
+    }
+  }
+
+  &__num {
+    font-size: 1.125rem;
+    font-weight: 700;
+
+    @media (min-width: 700px) {
+      font-size: 1.75rem;
+    }
+  }
+
+  // El día de hoy se marca igual que en la tira de días: número en círculo oscuro.
+  &--today &__num {
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--on-ink);
+    line-height: 1;
+
+    @media (min-width: 700px) {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+  }
+}
+
+// Hueco: celda con líneas finas; solo se colorea cuando tiene recetas.
+.cell {
+  --meal: var(--lunch);
+
+  position: relative;
+  display: flex;
+  align-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.5rem;
+  border-top: 1px solid var(--line);
+
+  &--breakfast {
+    --meal: var(--breakfast);
+  }
+  &--lunch {
+    --meal: var(--lunch);
+  }
+  &--snack {
+    --meal: var(--snack);
+  }
+  &--dinner {
+    --meal: var(--dinner);
+  }
+
+  // Primera fila: sin línea (ya tiene el borde del panel).
+  .daycol__head + & {
+    border-top: 0;
+  }
+
+  .daycol + .daycol > & {
+    border-left: 1px solid var(--line);
+  }
+
+  // Bloque de color inset cuando el hueco tiene recetas.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0.3rem;
+    border-radius: 16px;
+    background: transparent;
+    transition: background-color 0.2s;
+  }
+
+  &:not(&--empty)::before {
+    background: var(--meal);
+  }
+
+  // Hueco elegido como destino del panel de recetas.
+  &--active::after,
+  &--over::after {
+    content: "";
+    position: absolute;
+    inset: 0.3rem;
+    border: 2px solid var(--ink);
+    border-radius: 16px;
+    pointer-events: none;
+  }
+
+  &--over::after {
+    border-style: dashed;
+  }
+
+  &--over::before {
+    background: var(--soft);
+  }
+
+  // La franja ya se lee en la columna izquierda.
+  &__label {
+    @include visually-hidden;
+  }
+
+  &__list {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    pointer-events: none;
+  }
+
+  // Botón que cubre todo el hueco: elegirlo como destino de las recetas.
+  &__add {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+  }
+
+  &:not(&--empty) &__add svg {
+    display: none;
+  }
+
+  &--empty &__add svg {
+    opacity: 0.3;
+    transition: opacity 0.2s;
+  }
+
+  &--empty &__add:hover svg,
+  &--empty &__add:focus-visible svg {
+    opacity: 0.7;
+  }
+
+  // En escritorio se arrastra: el "+" solo aparece al pasar o enfocar.
+  @media (min-width: 1000px) and (hover: hover) {
+    &--empty &__add svg {
+      opacity: 0;
+    }
+
+    &--empty &__add:hover svg,
+    &--empty &__add:focus-visible svg {
+      opacity: 0.7;
+    }
+  }
+}
+
+.planned {
+  position: relative;
+  pointer-events: auto;
+
+  &__open {
+    display: block;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+
+    img {
+      width: 2.25rem;
+      height: 2.25rem;
+      border: 2px solid var(--card);
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 1px 4px rgba(17, 17, 19, 0.25);
+    }
+  }
+
+  &__remove {
+    position: absolute;
+    top: -0.4rem;
+    right: -0.4rem;
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--on-ink);
+    opacity: 0;
+    transition: opacity 0.2s;
+
+    svg {
+      width: 0.75rem;
+      height: 0.75rem;
+    }
+  }
+
+  &:hover &__remove,
+  &:focus-within &__remove {
+    opacity: 1;
+  }
+}
+
+// Panel de recetas del plan.
+.drawer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: var(--radius);
+  background: var(--card);
+
+  // Tablet: debajo del calendario, con la lista en dos columnas.
+  @media (min-width: 700px) {
+    &__list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 1rem;
+      max-height: 22rem;
+    }
+  }
+
+  // Escritorio: a la derecha, fijo mientras se mira el calendario.
+  @media (min-width: 1100px) {
+    position: sticky;
+    top: 1rem;
+    max-height: calc(100dvh - 2rem - 2 * var(--gutter));
+
+    &__list {
+      grid-template-columns: minmax(0, 1fr);
+      max-height: none;
+    }
+  }
+
+  // Móvil: hoja inferior.
+  @media (max-width: 699px) {
+    position: fixed;
+    z-index: 40;
+    inset: auto 0 0 0;
+    max-height: 78vh;
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+    border-radius: 24px 24px 0 0;
+    box-shadow: 0 -10px 40px rgba(13, 13, 15, 0.3);
+  }
+
+  &__close {
+    align-self: flex-end;
+    margin-bottom: -0.25rem;
+  }
+
+  &__list {
+    display: grid;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 0.15rem;
+  }
+
+  &__empty {
+    padding: 1rem 0;
+    color: var(--muted);
+  }
+
+  .chips {
+    gap: 0.3rem;
+  }
+}
+
+.pick {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.25rem;
+  border-bottom: 1px solid var(--line);
+  cursor: grab;
+
+  &__img {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  &__title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25;
+    text-align: left;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__meta {
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+}
+
+// Botón fijo para añadir recetas (solo móvil).
+.fab {
+  position: fixed;
+  right: 1rem;
+  bottom: calc(4.75rem + env(safe-area-inset-bottom));
+  z-index: 24;
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: var(--lime);
+  color: var(--on-lime);
+  box-shadow: 0 8px 24px rgba(13, 13, 15, 0.35);
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Recetas
+// ---------------------------------------------------------------------------
+.search {
+  &__form {
+    position: relative;
+  }
+
+  &__input {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.5rem 3rem 0.5rem 1.1rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--soft);
+
+    &::placeholder {
+      color: var(--muted);
+    }
+
+    &::-webkit-search-cancel-button {
+      display: none;
+    }
+  }
+
+  &__icon {
+    position: absolute;
+    top: 50%;
+    right: 1.1rem;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+  }
+}
+
+.api-key {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--muted);
+
+  summary {
+    width: fit-content;
+    padding: 0.25rem 0;
+    cursor: pointer;
+  }
+
+  &__form {
+    margin-top: 0.5rem;
+    padding: 1rem;
+    border-radius: 16px;
+    background: var(--soft);
+
+    label {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+  }
+
+  &__row {
+    display: flex;
+    gap: 0.5rem;
+
+    input {
+      flex: 1;
+      min-width: 0;
+      min-height: 2.5rem;
+      padding: 0.4rem 1rem;
+      border: 0;
+      border-radius: 999px;
+      background: var(--card);
+    }
+  }
+
+  &__hint {
+    margin-top: 0.5rem;
+  }
+}
+
+.filters {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.results-count {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.recipes {
+  display: flex;
+  flex-direction: column;
+
+  // En escritorio la vista ocupa justo la pantalla: las tarjetas que caben.
+  @media (min-width: 1000px) {
+    height: calc(100dvh - 2rem - 2.75rem);
+    min-height: 0;
+  }
+}
+
+.recipes__layout {
+  display: grid;
+  gap: 1.5rem;
+
+  @media (min-width: 1000px) {
+    flex: 1;
+    min-height: 0;
+    grid-template-columns: 17rem minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+.recipes__tools {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.recipes__results {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.recipes__area {
+  @media (min-width: 700px) {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+}
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+  grid-auto-rows: 17rem;
+  gap: 2.5rem 1rem;
+  padding-top: 2rem;
+}
+
+.card {
+  --meal: var(--lunch);
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 1.25rem 1.25rem;
+  border-radius: var(--radius);
+  background: var(--meal);
+
+  &--breakfast {
+    --meal: var(--breakfast);
+  }
+  &--lunch {
+    --meal: var(--lunch);
+  }
+  &--snack {
+    --meal: var(--snack);
+  }
+  &--dinner {
+    --meal: var(--dinner);
+  }
+
+  // El plato sobresale por arriba de la tarjeta, como en las referencias.
+  &__img {
+    width: 6rem;
+    height: 6rem;
+    margin: -2rem -0.25rem 0 auto;
+    border: 4px solid var(--card);
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 8px 20px rgba(17, 17, 19, 0.22);
+  }
+
+  &__title {
+    margin-top: -0.5rem;
+    font-family: var(--font-display);
+    font-size: 1.1875rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  &__open {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    text-align: left;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.9rem;
+    font-size: 0.8125rem;
+
+    li {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+  }
+
+  &__add {
+    margin-top: auto;
+    align-self: flex-start;
+  }
+}
+
+.card__facts--row {
+  font-size: 0.875rem;
+}
+
+// ---------------------------------------------------------------------------
+// Diálogos
+// ---------------------------------------------------------------------------
+.dialog {
+  width: min(92vw, 56rem);
+  max-height: 90vh;
+  padding: 0;
+  border: 0;
+  border-radius: 28px;
+  background: var(--card);
+  color: var(--ink);
+
+  &::backdrop {
+    background: rgba(13, 13, 15, 0.6);
+  }
+
+
+  &--small {
+    width: min(92vw, 30rem);
+  }
+
+  &__body {
+    position: relative;
+    padding: clamp(1.25rem, 4vw, 2.25rem);
+  }
+
+  &__close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+}
+
+.recipe-detail {
+  &__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.5rem;
+    padding-right: 3rem;
+
+    > div {
+      display: grid;
+      gap: 0.9rem;
+      justify-items: start;
+      flex: 1 1 16rem;
+    }
+  }
+
+  &__img {
+    width: 10rem;
+    height: 10rem;
+    border: 4px solid var(--card);
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 8px 20px rgba(17, 17, 19, 0.22);
+  }
+
+  &__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+
+  &__cols {
+    display: grid;
+    gap: 2rem;
+    margin-top: 2rem;
+
+    @media (min-width: 760px) {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+    }
+  }
+
+  &__heading {
+    margin-bottom: 0.75rem;
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+  }
+
+  &__source {
+    margin-top: 1rem;
+  }
+}
+
+.ingredients {
+  display: grid;
+  gap: 0.5rem;
+
+  li {
+    display: grid;
+    grid-template-columns: 5.5rem 1fr;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  &__amount {
+    font-weight: 600;
+  }
+}
+
+.steps {
+  display: grid;
+  gap: 0.9rem;
+  counter-reset: step;
+
+  li {
+    position: relative;
+    padding-left: 2.5rem;
+    counter-increment: step;
+
+    &::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: -0.1rem;
+      display: grid;
+      place-items: center;
+      width: 1.75rem;
+      height: 1.75rem;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--on-ink);
+      font-size: 0.8125rem;
+      font-weight: 700;
+    }
+  }
+}
+
+.add-form {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1rem;
+
+  &__recipe {
+    margin-top: 0.25rem;
+    color: var(--muted);
+  }
+
+  label {
+    margin-top: 0.5rem;
+    font-weight: 600;
+  }
+
+  select {
+    min-height: 2.75rem;
+    padding: 0.4rem 1rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--soft);
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+}
+
+// Ajustes del plan.
+.settings__group {
+  margin: 1rem 0 0;
+  padding: 0;
+  border: 0;
+
+  legend,
+  .settings__label {
+    padding: 0;
+    font-weight: 700;
+  }
+
+  ul {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  input[type="checkbox"] {
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    accent-color: var(--ink);
+  }
+
+  li label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  select {
+    display: block;
+    min-height: 2.75rem;
+    margin-top: 0.35rem;
+    padding: 0 1rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--soft);
+  }
+}
+
+.settings__hint {
+  margin: 0.25rem 0 0.6rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+// ---------------------------------------------------------------------------
+// Lista de la compra
+// ---------------------------------------------------------------------------
+.shopping {
+  &__groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1rem;
+  }
+}
+
+.aisle {
+  margin: 0;
+  padding: 1rem 1.25rem 1.25rem;
+  border: 0;
+  border-radius: 20px;
+  background: var(--soft);
+
+  legend {
+    padding: 0 0.5rem;
+    font-weight: 700;
+  }
+
+  ul {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  input {
+    flex: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0.2rem 0 0;
+    accent-color: var(--ink);
+  }
+
+  label {
+    cursor: pointer;
+  }
+
+  input:checked + label {
+    color: var(--muted);
+    text-decoration: line-through;
+  }
+
+  &__amount {
+    font-weight: 600;
+  }
+}
+
+// Chips con icono y texto (ajustes de apariencia).
+.chip--text-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+// La descripción solo se muestra en el carrusel móvil.
+.card__desc {
+  display: none;
+}
+
+// ---------------------------------------------------------------------------
+// Móvil: las recetas son un carrusel horizontal (sin barra) de tarjetas altas,
+// con las cifras a la izquierda y el plato grande sobresaliendo por la derecha.
+// ---------------------------------------------------------------------------
+@media (max-width: 699px) {
+  .recipe-grid {
+    display: flex;
+    gap: 1rem;
+    margin-inline: calc(-1 * var(--gutter));
+    padding: 3rem var(--gutter) 1rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  .card {
+    position: relative;
+    flex: 0 0 78%;
+    display: grid;
+    grid-template-areas:
+      "facts img"
+      "title title"
+      "desc desc"
+      "add add";
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto 1fr auto;
+    align-items: start;
+    gap: 0.75rem 0.5rem;
+    min-height: 25rem;
+    padding: 1.5rem 1.25rem 1.25rem;
+    border-radius: 18px;
+    scroll-snap-align: start;
+
+    &__img {
+      position: relative;
+      z-index: 2;
+      grid-area: img;
+      width: 10.5rem;
+      height: 10.5rem;
+      margin: -2rem -2.75rem 0 0;
+      border-width: 5px;
+    }
+
+    &__facts {
+      grid-area: facts;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      gap: 1.1rem;
+      align-self: center;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+    }
+
+    &__title {
+      grid-area: title;
+      align-self: end;
+      margin-top: 1.5rem;
+      font-size: 1.75rem;
+      line-height: 1.1;
+    }
+
+    &__open {
+      -webkit-line-clamp: 3;
+    }
+
+    &__desc {
+      grid-area: desc;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      color: var(--ink-soft);
+      font-size: 0.9375rem;
+      line-height: 1.45;
+    }
+
+    &__add {
+      grid-area: add;
+    }
+  }
+}
+
+// Emoji o icono de una comida.
+.glyph {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.icon-btn--small {
+  width: 2rem;
+  height: 2rem;
+  background: var(--soft);
+  box-shadow: none;
+
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+// Editor de comidas (ajustes).
+.meals-edit {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+
+  li {
+    display: grid;
+    grid-template-columns: 1.5rem 3.25rem minmax(0, 1fr) repeat(3, 2rem);
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  &__glyph {
+    display: grid;
+    place-items: center;
+  }
+
+  &__emoji,
+  &__name {
+    min-width: 0;
+    min-height: 2.5rem;
+    padding: 0 0.75rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--soft);
+  }
+
+  &__emoji {
+    text-align: center;
+  }
+}
+
+.settings__group li label {
+  line-height: 1.2;
+}
+
+// Sin min-width: 0 el carrusel (o la lista) ensancharía toda la página.
+.recipes__layout > *,
+.recipes__area {
+  min-width: 0;
+}
+
+@media (min-width: 1000px) {
+  // Altura fija (no flex): así el área de tarjetas tiene un alto definido.
+  .recipes {
+    flex: none;
+  }
+}
+
+// Móvil: los filtros caben en una fila desplazable y el carrusel gana altura útil.
+@media (max-width: 699px) {
+  .filters .chips,
+  .recipes__tools .chips {
+    flex-wrap: nowrap;
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      flex: none;
+    }
+  }
+
+  .card {
+    min-height: 23rem;
+  }
+
+  .recipes__layout {
+    gap: 0.75rem;
+  }
+}
+
+// Icono "i" con texto de ayuda bajo demanda.
+.search {
+  position: relative;
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .search__form {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+}
+
+.info__btn {
+  box-shadow: none;
+  background: var(--soft);
+}
+
+.info__panel {
+  position: absolute;
+  top: 3.5rem;
+  left: 0;
+  z-index: 35;
+  display: grid;
+  gap: 0.75rem;
+  width: min(21rem, calc(100vw - 2 * var(--gutter)));
+  padding: 1rem;
+  border-radius: 18px;
+  background: var(--card);
+  box-shadow: 0 10px 30px rgba(13, 13, 15, 0.28);
+  font-size: 0.875rem;
+  line-height: 1.45;
+
+  .api-key__form {
+    margin-top: 0;
+    background: var(--soft);
+  }
+}
+
+// Selector de emoji de cada comida (en lugar de una lista desplegable).
+.meals-edit li {
+  display: block;
+  grid-template-columns: none;
+}
+
+.meals-edit__row {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr) repeat(3, 2rem);
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.meals-edit__emojibtn {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--soft);
+
+  &[aria-expanded="true"] {
+    outline: 2px solid var(--violet);
+  }
+}
+
+.emoji-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-top: 0.4rem;
+  padding: 0.5rem;
+  border-radius: 14px;
+  background: var(--soft);
+
+  button {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    font-size: 1.5rem;
+    line-height: 1;
+
+    &:hover,
+    &[aria-pressed="true"] {
+      background: var(--card);
+    }
+
+    &[aria-pressed="true"] {
+      box-shadow: inset 0 0 0 2px var(--violet);
+    }
+  }
+
+  &__custom {
+    width: 4.5rem;
+    min-height: 2.5rem;
+    padding: 0 0.5rem;
+    border: 0;
+    border-radius: 12px;
+    background: var(--card);
+    font-size: 1.25rem;
+    text-align: center;
+  }
+}
+
+// Los emojis usan la fuente de emojis del sistema, a buen tamaño.
+.glyph,
+.emoji-grid button,
+.emoji-grid__custom {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+
+.glyph {
+  font-size: 1.35rem;
+}
+
+// ---------------------------------------------------------------------------
+// Tarjetas de receta: más suaves, con jerarquía clara y el plato protagonista.
+// ---------------------------------------------------------------------------
+.card {
+  position: relative;
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--meal) 72%, var(--card));
+
+  &__img {
+    border-width: 5px;
+    box-shadow: 0 16px 32px rgba(17, 17, 19, 0.22), 0 2px 6px rgba(17, 17, 19, 0.12);
+  }
+
+  &__title {
+    font-weight: 500;
+    letter-spacing: -0.02em;
+
+    strong {
+      font-weight: 800;
+    }
+  }
+
+  // Cifras discretas, con el color de la tarjeta.
+  &__facts {
+    color: color-mix(in srgb, var(--ink) 62%, transparent);
+    font-weight: 600;
+
+    svg {
+      color: color-mix(in srgb, var(--ink) 50%, var(--meal));
+    }
+  }
+
+  &__desc {
+    color: color-mix(in srgb, var(--ink) 72%, transparent);
+  }
+
+  // Corazón de favoritos (arriba a la izquierda).
+  &__fav {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--card) 70%, transparent);
+    color: var(--ink);
+    transition: background-color 0.2s, color 0.2s, transform 0.2s;
+
+    &:hover {
+      transform: scale(1.06);
+    }
+
+    &[aria-pressed="true"] {
+      background: #f08a97;
+      color: #fff;
+    }
+  }
+}
+
+@media (max-width: 699px) {
+  .card {
+    min-height: 22rem;
+    padding: 3.25rem 1.25rem 1.25rem;
+
+    &__img {
+      width: 9.75rem;
+      height: 9.75rem;
+      margin: -2.25rem -2.5rem 0 0;
+    }
+
+    &__facts {
+      gap: 0.85rem;
+      font-size: 0.8125rem;
+    }
+
+    &__title {
+      font-size: 1.6rem;
+      line-height: 1.08;
+    }
+
+    &__desc {
+      font-size: 0.875rem;
+      -webkit-line-clamp: 3;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Recetas en el calendario: plato y nombre, para ver de un vistazo qué toca.
+// ---------------------------------------------------------------------------
+.cell__list {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.planned {
+  &__open {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    width: 100%;
+    padding: 0.15rem 0;
+    border-radius: 14px;
+    text-align: center;
+
+    img {
+      width: 2.75rem;
+      height: 2.75rem;
+      flex: none;
+    }
+  }
+
+  &__title {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    max-width: 100%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ink);
+    overflow-wrap: anywhere;
+  }
+
+  &__open:hover &__title {
+    text-decoration: underline;
+  }
+
+  &__remove {
+    top: 0;
+    right: 0;
+  }
+}
+
+// Móvil: los huecos son anchos, así que plato a la izquierda y nombre a la derecha.
+@media (max-width: 699px) {
+  .cell {
+    padding: 0.5rem;
+  }
+
+  .planned__open {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 0.6rem;
+    padding: 0.15rem 0.2rem;
+    text-align: left;
+  }
+
+  .planned__title {
+    -webkit-line-clamp: 2;
+    font-size: 0.8125rem;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Insignias de las tarjetas: el corazón (arriba a la izquierda) y "añadir al
+// calendario" (abajo a la derecha) sobresalen de las esquinas.
+// ---------------------------------------------------------------------------
+.card {
+  &__fav,
+  &__add {
+    position: absolute;
+    z-index: 3;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin: 0;
+    box-shadow: 0 8px 18px rgba(17, 17, 19, 0.22);
+  }
+
+  &__fav {
+    top: -0.9rem;
+    left: -0.6rem;
+    background: var(--card);
+    color: #f08a97;
+
+    &[aria-pressed="true"] {
+      background: #f08a97;
+      color: #fff;
+    }
+  }
+
+  &__add {
+    right: -0.6rem;
+    bottom: -0.9rem;
+    left: auto;
+    top: auto;
+  }
+}
+
+.recipe-grid {
+  padding-bottom: 1rem;
+}
+
+@media (max-width: 699px) {
+  .recipe-grid {
+    padding: 3rem var(--gutter) 1.75rem;
+  }
+
+  .card {
+    grid-template-areas:
+      "facts img"
+      "title title"
+      "desc desc";
+    grid-template-rows: auto auto 1fr;
+    padding: 3rem 1.25rem 1.75rem;
+
+    &__fav {
+      top: -0.9rem;
+      left: -0.6rem;
+    }
+  }
+}
+
+// Margen lateral para que las insignias de las esquinas no se recorten.
+.recipe-grid {
+  padding-inline: 0.75rem;
+}
+
+// Los dos días visibles forman una sola píldora: sin radio en el borde central.
+.strip__day--first {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.strip__day--last {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+// Recetas: todas en una lista que se desplaza en vertical (escritorio y tablet).
+.recipe-grid {
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+}
+
+@media (min-width: 1000px) {
+  // La vista ocupa la pantalla y solo se desplaza el área de tarjetas.
+  .recipes__area {
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--ink) 30%, transparent) transparent;
+  }
+}
+
+@media (min-width: 700px) and (max-width: 999px) {
+  .recipes__area {
+    overflow: visible;
+  }
+}
+
+// Favorito y "añadir al calendario": en móvil sobresalen de las esquinas; en
+// escritorio y tablet van juntos, en una píldora al pie de la tarjeta.
+.card__actions {
+  display: contents;
+}
+
+@media (min-width: 700px) {
+  .card__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    align-self: flex-start;
+    margin-top: auto;
+    padding: 0.25rem;
+    border-radius: 999px;
+    background: var(--card);
+    box-shadow: 0 6px 16px rgba(17, 17, 19, 0.16);
+  }
+
+  .card__fav,
+  .card__add {
+    position: static;
+    z-index: auto;
+    width: 2.25rem;
+    height: 2.25rem;
+    box-shadow: none;
+  }
+
+  .card__fav {
+    background: transparent;
+
+    &:hover {
+      transform: none;
+      background: var(--soft);
+    }
+
+    &[aria-pressed="true"] {
+      background: #f08a97;
+      color: #fff;
+    }
+  }
+
+  .recipe-grid {
+    padding-bottom: 0.5rem;
+  }
+}
+
+// Píldora de acciones: pequeña y discreta, abajo a la derecha; la foto manda.
+@media (min-width: 700px) {
+  .card__actions {
+    align-self: flex-end;
+    gap: 0.1rem;
+    padding: 0.15rem;
+    background: color-mix(in srgb, var(--card) 60%, transparent);
+    box-shadow: none;
+  }
+
+  .card__fav,
+  .card__add {
+    width: 1.75rem;
+    height: 1.75rem;
+
+    svg {
+      width: 0.95rem;
+      height: 0.95rem;
+    }
+  }
+
+  .card__fav {
+    color: var(--ink-soft);
+  }
+
+  .card__add.icon-btn--dark {
+    background: transparent;
+    color: var(--ink-soft);
+
+    &:hover:not(:disabled) {
+      background: var(--card);
+      color: var(--ink);
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Logo, bienvenida, favoritos y menú de perfil
+// ---------------------------------------------------------------------------
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+
+  svg {
+    flex: none;
+    border-radius: 14px;
+  }
+
+  &__text {
+    font-size: 1.375rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+}
+
+.site-header .brand {
+  line-height: 0;
+}
+
+.welcome {
+  @media (min-width: 700px) {
+    padding: 1rem;
+  }
+
+  &__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-height: 100dvh;
+    padding: var(--gutter);
+    background: var(--grad);
+
+    @media (min-width: 700px) {
+      min-height: calc(100dvh - 2rem);
+      border-radius: 26px;
+    }
+  }
+
+  &__main {
+    display: grid;
+    flex: 1;
+    gap: 1.5rem;
+    align-content: start;
+
+    @media (min-width: 1000px) {
+      grid-template-columns: minmax(0, 1fr) 24rem;
+      align-items: center;
+      gap: 3rem;
+    }
+  }
+
+  &__title {
+    font-size: clamp(2.1rem, 5vw, 3.6rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__lead {
+    max-width: 34rem;
+    margin-top: 0.75rem;
+    font-size: 1.0625rem;
+    color: var(--ink-soft);
+  }
+
+  // En pantallas pequeñas la entrada va antes que las explicaciones.
+  &__card {
+    order: -1;
+    padding: 1.5rem;
+    border-radius: 24px;
+    background: var(--card);
+    box-shadow: 0 16px 40px rgba(17, 17, 19, 0.18);
+
+    @media (min-width: 1000px) {
+      order: 0;
+    }
+  }
+
+  &__card-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  &__card-sub {
+    margin-top: 0.25rem;
+    color: var(--muted);
+    font-size: 0.9375rem;
+  }
+
+  &__label {
+    display: block;
+    margin: 1.1rem 0 0.4rem;
+    padding: 0;
+    font-size: 0.8125rem;
+    font-weight: 700;
+  }
+
+  &__known .chips {
+    margin-top: 0.4rem;
+  }
+
+  &__input {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0 1.1rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--soft);
+
+    &::placeholder {
+      color: var(--muted);
+    }
+  }
+
+  &__avatars {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  &__note {
+    margin-top: 1rem;
+    color: var(--muted);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 3rem;
+  margin-top: 1.25rem;
+  padding: 0 1.5rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--lime);
+  color: var(--on-lime);
+  font-size: 1rem;
+  font-weight: 800;
+  transition: background-color 0.2s;
+
+  &:hover:not(:disabled) {
+    background: var(--lime-deep);
+  }
+}
+
+// "Cómo funciona": tres pasos con una ilustración cada uno.
+.steps-demo {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.75rem;
+
+  @media (min-width: 700px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.step {
+  padding: 0.85rem;
+  border-radius: 20px;
+  background: var(--tile-strong);
+
+  p {
+    margin-top: 0.25rem;
+    color: var(--ink-soft);
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.0625rem;
+    font-weight: 800;
+  }
+
+  &__num {
+    display: inline-grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--on-ink);
+    font-size: 0.75rem;
+  }
+
+  &__art {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 7rem;
+    margin-bottom: 0.75rem;
+    border-radius: 14px;
+    background: var(--card);
+    overflow: hidden;
+
+    img {
+      width: 4rem;
+      height: 4rem;
+      margin-left: -1rem;
+      border: 3px solid var(--card);
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 6px 14px rgba(17, 17, 19, 0.22);
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+
+    &--cal {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      gap: 3px;
+      padding: 0.5rem;
+    }
+
+    &--list {
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 0 1rem;
+    }
+  }
+
+  &__heart {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.6rem;
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: #f08a97;
+    color: #fff;
+
+    svg {
+      width: 0.9rem;
+      height: 0.9rem;
+    }
+  }
+}
+
+.cell-demo {
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  background: var(--soft);
+
+  img {
+    width: 1.6rem;
+    height: 1.6rem;
+    margin: 0;
+    border-width: 2px;
+    box-shadow: none;
+  }
+
+  &--breakfast {
+    background: var(--breakfast);
+  }
+  &--lunch {
+    background: var(--lunch);
+  }
+  &--snack {
+    background: var(--snack);
+  }
+  &--dinner {
+    background: var(--dinner);
+  }
+}
+
+.list-demo {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+
+  &__box {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 2px solid var(--ink-soft);
+    border-radius: 6px;
+
+    &--on {
+      border-color: var(--ink);
+      background: var(--ink);
+      color: var(--on-ink);
+    }
+
+    svg {
+      width: 0.75rem;
+      height: 0.75rem;
+    }
+  }
+
+  &__line {
+    height: 0.55rem;
+    border-radius: 999px;
+    background: var(--soft);
+  }
+}
+
+.empty {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  padding: 3rem 1rem;
+  color: var(--muted);
+  text-align: center;
+
+  &__icon {
+    display: grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background: var(--soft);
+  }
+}
+
+// Menú de perfil en la barra lateral (escritorio y tablet).
+.site-header .theme-toggle {
+  margin-top: 0;
+}
+
+.site-header .profile-btn {
+  display: none;
+  margin-top: auto;
+  background: var(--rail-btn);
+  box-shadow: none;
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    background: var(--rail-btn-hover);
+  }
+
+  @media (min-width: 700px) {
+    display: inline-grid;
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+.profile-panel {
+  position: absolute;
+  bottom: 0.75rem;
+  left: calc(100% + 0.75rem);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 0.9rem 0.75rem 1rem;
+  border-radius: 18px;
+  background: var(--card);
+  box-shadow: 0 10px 30px rgba(13, 13, 15, 0.28);
+  white-space: nowrap;
+
+  &__name {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    line-height: 1.2;
+  }
+
+  &__hint {
+    display: block;
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+}
+
+.settings__account {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+// La bienvenida usa <main> sin el panel blanco de la aplicación.
+.welcome__main {
+  display: grid;
+  flex: 1;
+  align-content: center;
+  overflow: visible;
+  background: transparent;
+  border-radius: 0;
+}
+
+// Día de hoy: mismo círculo para todos los días (así las etiquetas quedan
+// alineadas) y, en hoy, círculo oscuro con halo suave.
+.daycol__num {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  font-size: 1.0625rem;
+  line-height: 1;
+}
+
+.daycol--today .daycol__name {
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.daycol--today .daycol__num,
+.strip__day--today .strip__num {
+  background: var(--ink);
+  color: var(--on-ink);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink) 16%, transparent),
+    0 4px 10px rgba(17, 17, 19, 0.22);
+}
+
+@media (min-width: 700px) {
+  .daycol__head {
+    gap: 0.15rem;
+  }
+
+  .daycol__num {
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1.5rem;
+  }
+}
+
+// Halo sin ocupar espacio: así "thu" queda a la misma altura que el resto.
+.daycol--today .daycol__num,
+.strip__day--today .strip__num {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ink) 16%, transparent),
+    0 4px 10px rgba(17, 17, 19, 0.22);
+}
+
+.daycol__head {
+  justify-content: flex-start;
+  padding-top: 0.35rem;
+}
+
+@media (max-width: 699px) {
+  .daycol__head {
+    justify-content: center;
+    padding-top: 0;
+  }
+}
+
+// La píldora se pega a la esquina inferior derecha, ignorando el padding de la tarjeta.
+@media (min-width: 700px) {
+  .card__actions {
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.5rem;
+    margin: 0;
+  }
+}
+
+// Perfil y tema al pie de la barra lateral: el margen automático va en el
+// contenedor del menú (hijo directo de la barra), no en su botón.
+@media (min-width: 700px) {
+  .site-header .info {
+    margin-top: auto;
+    position: relative;
+  }
+
+  .site-header .profile-btn {
+    margin-top: 0;
+  }
+}
+
+// Escritorio y tablet: el plato es el protagonista (grande, centrado y que
+// sobresale por arriba); el texto queda debajo, más contenido.
+@media (min-width: 700px) {
+  .recipe-grid {
+    grid-auto-rows: 20.5rem;
+    gap: 4.5rem 1.25rem;
+    padding-top: 3.5rem;
+  }
+
+  .card {
+    padding: 0 1.25rem 1rem;
+
+    &__img {
+      width: 13rem;
+      height: 13rem;
+      margin: -3.25rem auto 0;
+      border-width: 6px;
+      box-shadow: 0 22px 40px rgba(17, 17, 19, 0.28), 0 3px 8px rgba(17, 17, 19, 0.14);
+      transition: transform 0.3s ease;
+    }
+
+    &:hover &__img {
+      transform: scale(1.04) rotate(-2deg);
+    }
+
+    &__title {
+      margin-top: 0.25rem;
+      font-size: 1.125rem;
+    }
+
+    &__open {
+      -webkit-line-clamp: 2;
+    }
+
+    &__facts {
+      font-size: 0.75rem;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card:hover .card__img {
+    transform: none;
+  }
+}
+
+// La barra lateral (y su menú de perfil) debe quedar por encima del contenido.
+@media (min-width: 700px) {
+  .site-header {
+    z-index: 30;
+  }
+}
+
+// Orden al pie de la barra: tema arriba y perfil debajo del todo.
+@media (min-width: 700px) {
+  .site-header .theme-toggle {
+    margin-top: auto;
+  }
+
+  .site-header .info {
+    margin-top: 0;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Acceso: la home es una vista más (sin panel propio) y el login social
+// ---------------------------------------------------------------------------
+.view.welcome {
+  padding: 0;
+  background: var(--grad);
+}
+
+.welcome__grid {
+  display: grid;
+  gap: 1.5rem;
+  min-height: 100%;
+  padding: var(--gutter);
+  align-content: start;
+
+  @media (min-width: 1000px) {
+    grid-template-columns: minmax(0, 1fr) 24rem;
+    align-items: center;
+    gap: 3rem;
+  }
+}
+
+.view.welcome {
+  display: flex;
+}
+
+.welcome__grid {
+  flex: 1;
+}
+
+.social {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3rem;
+    padding: 0 1.25rem;
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    background: var(--card);
+    font-weight: 700;
+
+    &:hover:not(:disabled) {
+      background: var(--soft);
+    }
+  }
+}
+
+.welcome__or {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.1rem 0 0;
+  color: var(--muted);
+  font-size: 0.8125rem;
+
+  &::before,
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+}
+
+.welcome__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+  font-size: 0.875rem;
+}
+
+.link-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+// Entrar desde el recetario (solo sin sesión).
+.site-header .signin-link {
+  display: none;
+  margin-top: 0;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--lime);
+  color: var(--on-lime);
+
+  @media (min-width: 700px) {
+    display: grid;
+  }
+}
+
+.welcome__grid {
+  align-content: center;
+}
+
+// ---------------------------------------------------------------------------
+// Móvil: la home son diapositivas deslizables y la navegación va centrada
+// ---------------------------------------------------------------------------
+.slider-dots {
+  display: none;
+}
+
+@media (max-width: 699px) {
+  .view.welcome {
+    position: relative;
+    min-height: calc(100dvh - 4.5rem);
+  }
+
+  .welcome__grid {
+    display: flex;
+    gap: 0;
+    padding: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  // El contenedor de la izquierda desaparece: sus hijos son diapositivas.
+  .welcome__hero {
+    display: contents;
+  }
+
+  .welcome__slide {
+    flex: 0 0 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(100dvh - 4.5rem);
+    padding: var(--gutter) var(--gutter) 4.5rem;
+    scroll-snap-align: start;
+  }
+
+  .welcome__slide--intro .welcome__title {
+    font-size: clamp(2.4rem, 11vw, 3.4rem);
+  }
+
+  .steps-demo.welcome__slide {
+    display: grid;
+    align-content: center;
+    gap: 0.75rem;
+    margin-top: 0;
+  }
+
+  .welcome__card.welcome__slide {
+    order: 0;
+    justify-content: center;
+    margin: 1.25rem var(--gutter) 4.5rem;
+    flex-basis: calc(100% - 2 * var(--gutter));
+    padding: 1.5rem;
+    min-height: 0;
+    align-self: center;
+  }
+
+  .slider-dots {
+    position: absolute;
+    bottom: 1.25rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+
+    button {
+      width: 0.6rem;
+      height: 0.6rem;
+      padding: 0;
+      border: 0;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--ink) 25%, transparent);
+      transition: width 0.25s, background-color 0.25s;
+    }
+
+    button[aria-current="true"] {
+      width: 1.6rem;
+      background: var(--ink);
+    }
+  }
+
+  // Los iconos de la barra inferior siempre centrados, sean 2 o 3.
+  .site-header nav ul {
+    display: flex;
+    justify-content: center;
+  }
+
+  .site-header nav li {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .site-header nav a {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+// Móvil: en la home el degradado llega hasta abajo (sin franja blanca del pie).
+@media (max-width: 699px) {
+  .app:has(.welcome) {
+    background: var(--grad);
+  }
+
+  .app:has(.welcome) .site-footer {
+    display: none;
+  }
+
+  .app:has(.welcome)::after {
+    display: none;
+  }
+}
+
+@media (max-width: 699px) {
+  .slider-dots {
+    bottom: calc(5rem + env(safe-area-inset-bottom));
+  }
+
+  .view.welcome,
+  .welcome__slide {
+    min-height: calc(100dvh - 0.5rem);
+  }
+
+  .welcome__slide {
+    padding-bottom: 7.5rem;
+  }
+
+  .welcome__card.welcome__slide {
+    min-height: 0;
+    margin-bottom: 7.5rem;
+  }
+}
+
+// Vista de acceso: solo la tarjeta, centrada sobre el degradado.
+.view.login {
+  display: grid;
+  place-items: center;
+  background: var(--grad);
+}
+
+.login__card {
+  width: min(100%, 26rem);
+}
+
+@media (max-width: 699px) {
+  .app:has(.login) {
+    background: var(--grad);
+  }
+
+  .app:has(.login) .site-footer,
+  .app:has(.login)::after {
+    display: none;
+  }
+}
+
+// Escritorio y tablet: más aire entre los elementos de la tarjeta.
+@media (min-width: 700px) {
+  .card {
+    gap: 1.5rem;
+  }
+}
+
+// El <legend> ignora márgenes: se flota para que respete el espacio sobre y bajo el texto.
+.welcome__avatars {
+  margin: 1.1rem 0 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+
+  legend {
+    float: left;
+    width: 100%;
+    margin: 0 0 0.4rem;
+    padding: 0;
+  }
+
+  .chips {
+    clear: both;
+  }
+}
+
+// Móvil: la diapositiva de herramientas mide lo mismo que la del acceso.
+@media (max-width: 699px) {
+  .welcome__grid {
+    --slide-h: 29rem;
+  }
+
+  .welcome__card.welcome__slide {
+    min-height: var(--slide-h);
+  }
+
+  .steps-demo.welcome__slide {
+    align-content: stretch;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    height: var(--slide-h);
+    min-height: 0;
+    margin-block: auto;
+    padding-block: 0;
+    align-self: center;
+  }
+
+  .steps-demo .step {
+    display: grid;
+    grid-template-columns: 6.5rem minmax(0, 1fr);
+    grid-template-areas: "art title" "art text";
+    align-content: center;
+    align-items: center;
+    column-gap: 0.85rem;
+    padding: 0.7rem;
+  }
+
+  .steps-demo .step__art {
+    grid-area: art;
+    height: 5rem;
+    margin: 0;
+  }
+
+  .steps-demo .step__title {
+    grid-area: title;
+    align-self: end;
+  }
+
+  .steps-demo .step p {
+    grid-area: text;
+    align-self: start;
+    margin: 0.15rem 0 0;
+  }
+}
+
+@media (max-width: 699px) {
+  .welcome__grid {
+    --slide-h: 30rem;
+  }
+
+  .welcome__card.welcome__slide {
+    height: auto;
+    min-height: var(--slide-h);
+  }
+
+  .steps-demo .step__art--plates img {
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-left: -0.6rem;
+  }
+
+  .steps-demo .step__art--cal .cell-demo img {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+@media (max-width: 699px) {
+  .welcome__grid {
+    --slide-h: 26rem;
+  }
+
+  .steps-demo .step {
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+  }
+
+  .steps-demo .step__art {
+    height: 7rem;
+  }
+}
+
+// Cada diapositiva se ancla por su centro: la tarjeta de acceso (que lleva
+// márgenes laterales) queda centrada en pantalla, no pegada a un lado.
+@media (max-width: 699px) {
+  .welcome__slide {
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+}
+
+// Menú de perfil: elegir avatar y salir.
+.profile-panel {
+  flex-wrap: wrap;
+  max-width: 17rem;
+  white-space: normal;
+
+  &__name {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__avatars {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    flex-basis: 100%;
+    order: 3;
+
+    .glyph {
+      display: grid;
+      place-items: center;
+      width: 2.25rem;
+      height: 2.25rem;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: var(--soft);
+      font-size: 1.2rem;
+
+      &[aria-pressed="true"] {
+        box-shadow: inset 0 0 0 2px var(--violet);
+      }
+    }
+  }
+
+  &__reset {
+    padding: 0 0.6rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  &__out {
+    order: 2;
+  }
+}
+
+.profile-panel {
+  width: 17rem;
+  max-width: none;
+  align-items: center;
+}
+
+.profile-panel__name {
+  flex: 1 1 8rem;
+}
+
+.profile-panel__avatars {
+  display: grid;
+  grid-template-columns: repeat(6, 2.25rem);
+  justify-content: space-between;
+}
+
+.profile-panel__reset {
+  grid-column: 1 / -1;
+  justify-self: start;
+  min-height: 2rem;
+}
+
+.avatar-badge {
+  display: inline-grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  line-height: 1;
+  flex: none;
+
+  .avatar {
+    width: 100%;
+    height: 100%;
+  }
+
+  > svg {
+    width: 100%;
+    height: 100%;
+    margin-top: 18%;
+    opacity: 0.85;
+  }
+}
+
+// Botón de quitar avatar: a la derecha, bajo la cuadrícula.
+.profile-panel__reset {
+  grid-column: 1 / -1;
+  justify-self: end;
+  width: 2rem;
+  min-height: 0;
+  padding: 0;
+  text-decoration: none;
+}
+
+// Compartir
+.share__text {
+  margin-top: 0.75rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.share__link {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+
+  input {
+    flex: 1;
+    min-width: 0;
+    min-height: 2.5rem;
+    padding: 0 1rem;
+    border: 0;
+    border-radius: 999px;
+    background: var(--soft);
+    font-size: 0.8125rem;
+  }
+}
+
+.share__members {
+  margin-top: 1rem;
+}
+
+.share__label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
+  font-weight: 700;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 5.5rem;
+  z-index: 60;
+  transform: translateX(-50%);
+  padding: 0.7rem 1.2rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--on-ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(13, 13, 15, 0.35);
+
+  @media (min-width: 700px) {
+    bottom: 2rem;
+  }
+}
+
+// Avatar propio: la cruz para quitarlo va superpuesta en la esquina superior
+// derecha del avatar y solo existe si está personalizado.
+.profile-panel__me {
+  position: relative;
+  display: inline-grid;
+  flex: none;
+}
+
+.profile-panel__remove {
+  position: absolute;
+  top: -0.45rem;
+  right: -0.55rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  background: var(--ink);
+  color: var(--on-ink);
+  box-shadow: 0 2px 6px rgba(17, 17, 19, 0.3);
+
+  svg {
+    width: 0.7rem;
+    height: 0.7rem;
+  }
+}
+
+.profile-panel__custom {
+  grid-column: span 4;
+  min-width: 0;
+  min-height: 2.25rem;
+  padding: 0 0.9rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--soft);
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", var(--font-body);
+}
+
+.profile-panel__avatars .icon-btn--small {
+  justify-self: end;
+}
+
+.profile-panel__error {
+  flex-basis: 100%;
+  order: 4;
+  margin: 0;
+}
+
+// Píldora de acciones en todos los tamaños: "añadir" y, a su derecha, el favorito.
+.card__actions {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.1rem;
+  align-self: auto;
+  margin: 0;
+  padding: 0.15rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--card) 60%, transparent);
+  box-shadow: none;
+
+  .card__fav,
+  .card__add {
+    position: static;
+    inset: auto;
+    z-index: auto;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin: 0;
+    box-shadow: none;
+
+    svg {
+      width: 0.95rem;
+      height: 0.95rem;
+    }
+  }
+
+  .card__fav {
+    background: transparent;
+    color: var(--ink-soft);
+
+    &:hover {
+      transform: none;
+      background: var(--card);
+    }
+
+    &[aria-pressed="true"] {
+      background: #f08a97;
+      color: #fff;
+    }
+  }
+
+  .card__add.icon-btn--dark {
+    background: transparent;
+    color: var(--ink-soft);
+
+    &:hover:not(:disabled) {
+      background: var(--card);
+      color: var(--ink);
+    }
+  }
+}
+
+@media (max-width: 699px) {
+  // El carrusel ya no necesita sitio para insignias que sobresalgan.
+  .card {
+    grid-template-areas:
+      "facts img"
+      "title title"
+      "desc desc";
+    padding-bottom: 2.75rem;
+  }
+
+  .recipe-grid {
+    padding-bottom: 1rem;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Segunda pasada de refinamiento: acceso, tarjetas, barra lateral y pie
+// ---------------------------------------------------------------------------
+
+// Tooltips de la barra lateral (al pasar el cursor o enfocar con teclado).
+@media (min-width: 700px) {
+  .site-header [data-tip] {
+    position: relative;
+  }
+
+  .site-header [data-tip]::after {
+    content: attr(data-tip);
+    position: absolute;
+    left: calc(100% + 0.6rem);
+    top: 50%;
+    z-index: 60;
+    padding: 0.35rem 0.7rem;
+    border-radius: 8px;
+    background: var(--ink);
+    color: var(--on-ink);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transform: translate(-4px, -50%);
+    transition: opacity 0.15s, transform 0.15s;
+  }
+
+  .site-header [data-tip]:hover::after,
+  .site-header [data-tip]:focus-visible::after {
+    opacity: 1;
+    transform: translate(0, -50%);
+  }
+
+  // El menú de perfil se abre al lado: sin tooltip mientras está abierto.
+  .site-header .info:has(.profile-panel) [data-tip]::after {
+    display: none;
+  }
+}
+
+// Composición: bloque de presentación más contenido y formulario más cerca.
+.welcome__grid {
+  @media (min-width: 1000px) {
+    grid-template-columns: minmax(0, 40rem) 24rem;
+    justify-content: center;
+    gap: 3.5rem;
+  }
+}
+
+// Fondo: el degradado se suaviza tras el contenido.
+.view.welcome,
+.view.login {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.22)), var(--grad);
+}
+
+.welcome__title {
+  max-width: 13ch;
+  text-wrap: balance;
+}
+
+.welcome__lead {
+  color: color-mix(in srgb, var(--ink) 82%, transparent);
+  max-width: 30rem;
+}
+
+// Tarjeta de acceso: radio y sombra más discretos.
+.welcome__card {
+  border-radius: 20px;
+  box-shadow: 0 10px 28px rgba(17, 17, 19, 0.12);
+}
+
+// Campos: blancos, con borde fino y foco en la marca (negro con halo lima).
+.welcome__input {
+  border: 1.5px solid var(--line);
+  background: var(--card);
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--ink) 35%, var(--line));
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--ink);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--lime) 70%, transparent);
+  }
+}
+
+.cta {
+  &:focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 3px;
+  }
+
+  &:disabled {
+    background: color-mix(in srgb, var(--lime) 45%, var(--card));
+    color: var(--muted);
+  }
+}
+
+// Enlaces secundarios con menos protagonismo.
+.welcome__links .link-btn {
+  color: var(--muted);
+  font-weight: 500;
+  text-decoration-thickness: 1px;
+
+  &:hover {
+    color: var(--ink);
+  }
+}
+
+// Tarjetas informativas: más imagen, numeración discreta y contenido alineado.
+.steps-demo {
+  gap: 0.75rem;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  padding: 0.7rem;
+  background: color-mix(in srgb, var(--card) 55%, transparent);
+
+  &__art {
+    height: 7rem;
+    margin-bottom: 0.7rem;
+  }
+
+  &__title {
+    font-size: 1rem;
+  }
+
+  p {
+    font-size: 0.8125rem;
+  }
+
+  &__num {
+    width: auto;
+    height: auto;
+    background: none;
+    color: var(--muted);
+    font-size: 0.8125rem;
+    font-weight: 700;
+
+    &::after {
+      content: ".";
+    }
+  }
+
+  &__art--plates img {
+    width: 5rem;
+    height: 5rem;
+    margin-left: -1.1rem;
+  }
+}
+
+// Pie: más discreto y legible sobre el marco oscuro.
+.site-footer {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+.step__title .step__num {
+  display: inline;
+  place-items: initial;
+
+  &::after {
+    content: none;
+  }
+}
+
+.step__title {
+  gap: 0.4rem;
+}
+
+// Numeración: círculo pequeño con borde fino, centrado con el título.
+.step__title {
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.step__title .step__num {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 1.375rem;
+  height: 1.375rem;
+  border: 1.5px solid color-mix(in srgb, var(--ink) 45%, transparent);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+// ---------------------------------------------------------------------------
+// Revisión de escritorio: tarjetas ordenadas, calendario legible y filtros claros
+// ---------------------------------------------------------------------------
+.filters {
+  gap: 0.4rem;
+}
+
+.filters__title {
+  margin: 0.6rem 0 0;
+  color: var(--muted);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+// Tooltip propio en los filtros de icono.
+.chip--icon[data-tip] {
+  position: relative;
+}
+
+.chip--icon[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 0.45rem);
+  left: 50%;
+  z-index: 40;
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  background: var(--ink);
+  color: var(--on-ink);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.chip--icon[data-tip]:hover::after,
+.chip--icon[data-tip]:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.chip[aria-pressed="true"] {
+  box-shadow: 0 0 0 2px var(--card), 0 0 0 3.5px var(--ink);
+}
+
+// Calendario: recetas más grandes y legibles.
+@media (min-width: 1000px) {
+  .cal {
+    --row-min: 7.5rem;
+  }
+
+  .planned__open img {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .planned__title {
+    font-size: 0.8125rem;
+    line-height: 1.2;
+    -webkit-line-clamp: 3;
+  }
+}
+
+// Las recetas no llevan color de comida: sirven para cualquier franja.
+.card,
+.card--breakfast,
+.card--lunch,
+.card--snack,
+.card--dinner {
+  --meal: var(--soft);
+
+  background: var(--soft);
+}
+
+// ---------------------------------------------------------------------------
+// Plan: cada receta es una tarjeta blanca (nombre a la izquierda y foto
+// cuadrada a la derecha); el color de la franja queda en la columna izquierda.
+// ---------------------------------------------------------------------------
+@mixin plan-recipe-card {
+  .cell:not(.cell--empty)::before {
+    background: transparent;
+  }
+
+  .cell__list {
+    gap: 0.45rem;
+  }
+
+  .planned {
+    width: 100%;
+  }
+
+  .planned__open {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
+    min-height: 3.75rem;
+    padding: 0.4rem 0.4rem 0.4rem 0.65rem;
+    border-radius: 14px;
+    background: var(--card);
+    box-shadow: 0 1px 6px rgba(17, 17, 19, 0.14);
+    text-align: left;
+
+    img {
+      flex: none;
+      width: 2.9rem;
+      height: 2.9rem;
+      border: 0;
+      border-radius: 10px;
+      box-shadow: none;
+    }
+  }
+
+  .planned__title {
+    min-width: 0;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    line-height: 1.2;
+    -webkit-line-clamp: 3;
+  }
+
+  .planned__remove {
+    top: -0.35rem;
+    right: -0.35rem;
+  }
+}
+
+@media (min-width: 1000px) {
+  @include plan-recipe-card;
+}
+
+@media (max-width: 699px) {
+  @include plan-recipe-card;
+
+  .planned__open {
+    min-height: 3.25rem;
+
+    img {
+      width: 2.4rem;
+      height: 2.4rem;
+    }
+  }
+}
+
+// Columnas estrechas (escritorio con el panel de recetas abierto): foto arriba y
+// nombre debajo. Con pantalla ancha vuelve a foto a la derecha del nombre.
+@media (min-width: 1000px) and (max-width: 1799px) {
+  .planned__open {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0.35rem;
+    padding: 0.3rem 0.3rem 0.45rem;
+
+    img {
+      width: 100%;
+      height: 3.1rem;
+      border-radius: 10px;
+    }
+  }
+
+  .planned__title {
+    padding: 0 0.2rem;
+    font-size: 0.75rem;
+    -webkit-line-clamp: 2;
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1799px) {
+  .cal {
+    --row-min: 6.25rem;
+  }
+
+  .planned__open {
+    gap: 0.25rem;
+    padding: 0.25rem 0.25rem 0.35rem;
+
+    img {
+      height: 2.4rem;
+    }
+  }
+
+  .cell {
+    padding: 0.4rem;
+  }
+
+  .cell__list {
+    gap: 0.35rem;
+  }
+}
+
+// Las tarjetas del plan llenan siempre toda la celda: con 1, 2 o 3 recetas se
+// reparten el alto disponible a partes iguales.
+@media (min-width: 1000px), (max-width: 699px) {
+  .cell:not(.cell--empty) {
+    align-content: stretch;
+    align-items: stretch;
+  }
+
+  .cell__list {
+    display: flex;
+    flex-direction: column;
+    align-self: stretch;
+    height: 100%;
+  }
+
+  .planned {
+    display: flex;
+    flex: 1 1 0;
+    min-height: 0;
+  }
+
+  .planned__open {
+    flex: 1;
+    height: 100%;
+  }
+}
+
+// En columna estrecha, la foto absorbe el espacio sobrante de la tarjeta.
+@media (min-width: 1000px) and (max-width: 1799px) {
+  .planned__open img {
+    flex: 1 1 auto;
+    min-height: 2.4rem;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .planned__title {
+    flex: none;
+  }
+}
