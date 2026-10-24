@@ -164,7 +164,7 @@ function Planner() {
 
         <div
           className="cal__wrap"
-          style={{ "--rows": activeMeals.length, "--span": activeMeals.length + 1 }}
+          data-rows={activeMeals.length}
         >
         <div className="cal__labels" aria-hidden="true">
           <span className="cal__corner">W{first.week}</span>

@@ -28,14 +28,14 @@ function ProfileMenu() {
   return (
     <InfoPopover
       label={`Account: ${user.name}`}
-      icon={<Avatar user={user} size="100%" />}
+      icon={<Avatar user={user} size="fill" />}
       tooltip="custom"
       buttonClass="profile-btn"
       panelClass="profile-panel"
     >
       <p className="profile-panel__name">
         <span className="profile-panel__me">
-          <Avatar user={user} size="2.5rem" />
+          <Avatar user={user} size="md" />
           {user.custom && (
             <IconButton
               label={user.hasPhoto ? "Use my account photo" : "Remove avatar"}

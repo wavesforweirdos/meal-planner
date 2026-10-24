@@ -1,4 +1,6 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
+import LiquidWipe from "../LiquidWipe";
+import Loader from "../Loader";
 import { AuthContext } from "../../context/AuthContext";
 import { defaultRecipeBook } from "../../data";
 import {
@@ -113,7 +115,7 @@ export function SignInCard({ className = "" }) {
 
 // Inicio: explica la aplicación con pequeñas ilustraciones y permite entrar.
 // Con Firebase: Google o email. Sin él: perfil local de este navegador.
-function Welcome() {
+function WelcomeContent() {
   const samples = defaultRecipeBook.slice(0, 4);
   // Móvil: la home es un carrusel de diapositivas (título, herramientas, acceso).
   const sliderRef = useRef(null);
@@ -223,7 +225,7 @@ function Welcome() {
                     <span className={`list-demo__box${i !== 1 ? " list-demo__box--on" : ""}`}>
                       {i !== 1 && <CheckIcon />}
                     </span>
-                    <span className="list-demo__line" style={{ width: `${w}%` }} />
+                    <span className="list-demo__line" />
                   </span>
                 ))}
               </div>
@@ -253,6 +255,100 @@ function Welcome() {
         ))}
       </div>
     </section>
+  );
+}
+
+const INTRO_KEY = "meal-planner:intro-seen-v2";
+const INTRO_MS = 4000; // casi una vuelta de la animación (5 s)
+
+// Primera visita (una vez por sesión): la mascota anima el centro de la home
+// durante unos 4 s (o hasta que se toque la pantalla), y también mientras se
+// comprueba la sesión. Después aparece la home.
+function Welcome() {
+  const { checking } = useContext(AuthContext);
+  // La intro solo es para quien no conoce la app: primera visita (o sin caché,
+  // pues entonces tampoco hay marca) y nadie que haya iniciado sesión antes.
+  const returning = (() => {
+    try {
+      return localStorage.getItem("meal-planner:signed-in-before") === "1";
+    } catch {
+      return false;
+    }
+  })();
+  const [introDone, setIntroDone] = useState(() => {
+    if (returning) return true;
+    try {
+      return sessionStorage.getItem(INTRO_KEY) === "1";
+    } catch {
+      return false;
+    }
+  });
+
+  // Durante la intro la barra de navegación está oculta; al acabar aparece con un
+  // efecto de gota (ver [data-intro] en los estilos).
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    if (!introDone) root.dataset.intro = "on";
+    return () => {
+      if (root.dataset.intro === "on") delete root.dataset.intro;
+    };
+  }, [introDone]);
+
+  const [wipe, setWipe] = useState(false);
+  const finishIntro = () => {
+    try {
+      sessionStorage.setItem(INTRO_KEY, "1");
+    } catch {
+      // sin almacenamiento
+    }
+    const root = document.documentElement;
+    const desktop = window.matchMedia("(min-width: 700px)").matches;
+    root.dataset.intro = "drop";
+    if (desktop) {
+      // El panel se aparta y los botones brotan de su degradado (LiquidWipe,
+      // fase "grow"); después los botones reales toman el relevo ("settle").
+      setWipe(true);
+      setTimeout(() => {
+        if (root.dataset.intro === "grow") root.dataset.intro = "settle";
+      }, 2500);
+      setTimeout(() => {
+        if (root.dataset.intro === "settle") delete root.dataset.intro;
+      }, 3600);
+    } else {
+      setTimeout(() => {
+        if (root.dataset.intro === "drop") delete root.dataset.intro;
+      }, 2000);
+    }
+    setIntroDone(true);
+  };
+
+  useEffect(() => {
+    if (introDone) return undefined;
+    const timer = setTimeout(finishIntro, INTRO_MS);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [introDone]);
+
+  // Si la intro ya se vio, mientras se comprueba la sesión la vista queda en blanco:
+  // la mascota solo aparece en la intro completa, nunca como un destello.
+  if (introDone && checking) return <section className="view welcome" aria-hidden="true" />;
+
+  if (!introDone) {
+    return (
+      <section
+        className="view welcome welcome--intro"
+        aria-label="Loading"
+        onClick={finishIntro}
+      >
+        <Loader size="lg" />
+      </section>
+    );
+  }
+  return (
+    <>
+      <WelcomeContent />
+      {wipe && <LiquidWipe onDone={() => setWipe(false)} />}
+    </>
   );
 }
 

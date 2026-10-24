@@ -43,6 +43,16 @@ export function AuthProvider({ children }) {
     });
   }, []);
 
+  // Quien ha iniciado sesión alguna vez ya conoce la app: no verá la intro animada.
+  useEffect(() => {
+    if (!userId) return;
+    try {
+      localStorage.setItem("meal-planner:signed-in-before", "1");
+    } catch {
+      // sin almacenamiento
+    }
+  }, [userId]);
+
   const localUser = users.find((u) => u.id === userId) ?? null;
   const base = firebaseEnabled ? account : localUser;
 

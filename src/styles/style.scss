@@ -3322,6 +3322,21 @@ main {
   min-height: 2rem;
 }
 
+.avatar-badge--sm {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.avatar-badge--md {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.avatar-badge--fill {
+  width: 100%;
+  height: 100%;
+}
+
 .avatar-badge {
   display: inline-grid;
   place-items: center;
@@ -3548,6 +3563,7 @@ main {
     color: var(--on-ink);
     font-size: 0.8125rem;
     font-weight: 600;
+    line-height: 1.3;
     white-space: nowrap;
     pointer-events: none;
     opacity: 0;
@@ -3963,4 +3979,448 @@ main {
   .planned__title {
     flex: none;
   }
+}
+
+// Logo basado en máscara PNG: tamaño, forma y color salen de clases.
+.logo--sm {
+  --logo-h: 2rem;
+}
+
+.logo--md {
+  --logo-h: 3rem;
+}
+
+.logo--lg {
+  --logo-h: 4rem;
+}
+
+.logo__tile {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  height: var(--logo-h, 3rem);
+  aspect-ratio: 1;
+  border-radius: 24%;
+}
+
+.logo__mark {
+  width: 80%;
+  height: 80%;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.logo__tile--min .logo__mark {
+  -webkit-mask-image: url("/logo-mark-min.png");
+  mask-image: url("/logo-mark-min.png");
+}
+
+.logo__tile--full .logo__mark {
+  -webkit-mask-image: url("/logo-mark.png");
+  mask-image: url("/logo-mark.png");
+}
+
+.logo__tile--horizontal {
+  aspect-ratio: 900 / 310;
+  border-radius: 0;
+
+  .logo__mark {
+    width: 100%;
+    height: 100%;
+    -webkit-mask-image: url("/logo-horizontal.png");
+    mask-image: url("/logo-horizontal.png");
+  }
+}
+
+.logo__tile--lilac {
+  background: #b8a9f3;
+}
+
+.logo__tile--lime {
+  background: #e3fb5f;
+}
+
+.logo__tile--dark {
+  background: #111113;
+}
+
+.logo__tile--plain,
+.logo__tile--horizontal {
+  background: transparent;
+}
+
+.logo__tile--lilac .logo__mark,
+.logo__tile--lime .logo__mark {
+  background: #111113;
+}
+
+.logo__tile--dark .logo__mark {
+  background: #fff;
+}
+
+.logo__tile--plain .logo__mark {
+  background: currentcolor;
+}
+
+.logo__tile--horizontal.logo__tile--lilac .logo__mark,
+.logo__tile--horizontal.logo__tile--lime .logo__mark {
+  background: #111113;
+}
+
+.sign-brand {
+  display: block;
+  margin-bottom: 1rem;
+  color: var(--ink);
+}
+
+// ---------------------------------------------------------------------------
+// Mascota animada de carga
+// ---------------------------------------------------------------------------
+.loader {
+  display: inline-block;
+  background: var(--ink);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  // Cuadrícula de 10 columnas × 6 filas (60 fotogramas a 12 por segundo).
+  -webkit-mask-size: 1000% 600%;
+  mask-size: 1000% 600%;
+  -webkit-mask-position: 0 0;
+  mask-position: 0 0;
+  animation:
+    loader-x 0.8333s steps(10, jump-none) infinite,
+    loader-y 5s steps(6, jump-none) infinite;
+  -webkit-mask-image: url("/loader-sheet.webp");
+  mask-image: url("/loader-sheet.webp");
+}
+
+.loader--sm {
+  width: 6rem;
+  height: 6rem;
+}
+
+.loader--md {
+  width: 10rem;
+  height: 10rem;
+}
+
+.loader--lg {
+  width: 15rem;
+  height: 15rem;
+}
+
+@keyframes loader-x {
+  from {
+    -webkit-mask-position-x: 0;
+    mask-position-x: 0;
+  }
+
+  to {
+    -webkit-mask-position-x: 100%;
+    mask-position-x: 100%;
+  }
+}
+
+@keyframes loader-y {
+  from {
+    -webkit-mask-position-y: 0;
+    mask-position-y: 0;
+  }
+
+  to {
+    -webkit-mask-position-y: 100%;
+    mask-position-y: 100%;
+  }
+}
+
+.loader-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  background: var(--card);
+}
+
+// Intro de la home: la mascota animada centrada sobre el degradado.
+.welcome--intro {
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.view.welcome.welcome--intro {
+  display: grid;
+  place-items: center;
+}
+
+// ---------------------------------------------------------------------------
+// Intro: la barra de navegación empieza oculta y aparece como una gota que se
+// separa del panel (se estira, rebota un poco y se asienta).
+// ---------------------------------------------------------------------------
+html[data-intro="on"] .site-header,
+html[data-intro="on"] .site-header nav {
+  visibility: hidden;
+}
+
+@keyframes drop-desktop {
+  0% {
+    opacity: 0;
+    transform: translateX(2.25rem) scale(0.18, 0.34);
+    border-radius: 2rem;
+    filter: blur(10px);
+  }
+
+  45% {
+    opacity: 1;
+    transform: translateX(-0.25rem) scale(1.07, 0.96);
+    border-radius: 1rem;
+    filter: blur(2px);
+  }
+
+  70% {
+    transform: translateX(0.12rem) scale(0.98, 1.02);
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes drop-mobile {
+  0% {
+    opacity: 0;
+    transform: translateY(2.5rem) scale(0.4, 0.2);
+    border-radius: 1rem;
+    filter: blur(10px);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(-0.3rem) scale(1.03, 1.08);
+    filter: blur(2px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes drop-icons {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes header-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes icon-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (min-width: 700px) {
+  // La barra real aparece cuando la gota ya ha formado su silueta.
+  html[data-intro="drop"] .site-header {
+    animation: header-in 0.4s ease-out 1.25s both;
+  }
+
+  html[data-intro="drop"] .site-header > * {
+    animation: icon-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: calc(1.3s + var(--i, 0) * 0.08s);
+  }
+
+  html[data-intro="drop"] .site-header > :nth-child(2) { --i: 1; }
+  html[data-intro="drop"] .site-header > :nth-child(3) { --i: 2; }
+  html[data-intro="drop"] .site-header > :nth-child(4) { --i: 3; }
+  html[data-intro="drop"] .site-header > :nth-child(5) { --i: 4; }
+}
+
+@media (max-width: 699px) {
+  html[data-intro="drop"] .site-header nav {
+    transform-origin: center bottom;
+    animation: drop-mobile 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+// Durante la intro el hueco de la barra lateral también desaparece (el panel
+// ocupa todo el ancho) y se abre con la gota al terminar.
+@media (min-width: 700px) {
+  .app {
+    transition: grid-template-columns 1.4s cubic-bezier(0.22, 1, 0.36, 1), column-gap 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  html[data-intro="on"] .app {
+    grid-template-columns: 0 minmax(0, 1fr);
+    column-gap: 0;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Fin de la intro, efecto líquido: un líquido del color del marco entra desde la
+// izquierda empujando el degradado (ver LiquidWipe). Mientras tanto la barra y
+// su hueco siguen ocultos ("drop"); cuando el líquido ya ha dibujado el borde se
+// aplica la maquetación final ("settle") y los botones de la barra aparecen
+// diluidos, desde un desenfoque.
+// ---------------------------------------------------------------------------
+@keyframes dissolve-in {
+  0% {
+    opacity: 0;
+    filter: blur(16px);
+    transform: scale(0.85);
+  }
+
+  60% {
+    opacity: 1;
+    filter: blur(5px);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+}
+
+@keyframes dissolve-icon {
+  0% {
+    opacity: 0;
+    filter: blur(12px);
+    transform: scale(0.35);
+  }
+
+  55% {
+    opacity: 1;
+    filter: blur(4px);
+    transform: scale(1.12);
+  }
+
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+  }
+}
+
+@media (min-width: 700px) {
+  .app {
+    transition: none;
+  }
+
+  // "drop": maquetación sin barra. "grow": maquetación final, el panel se aparta
+  // con elasticidad mientras los botones brotan de su borde (LiquidWipe).
+  // "settle": los botones reales toman el relevo, desde un desenfoque.
+  html[data-intro="drop"] .app {
+    grid-template-columns: 0 minmax(0, 1fr);
+    column-gap: 0;
+  }
+
+  html[data-intro="grow"] .app {
+    transition:
+      grid-template-columns 1.4s cubic-bezier(0.22, 1, 0.36, 1),
+      column-gap 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  html[data-intro="drop"] .site-header,
+  html[data-intro="drop"] .site-header nav {
+    visibility: hidden;
+  }
+
+  // Mientras los botones salen, el panel pasa por encima de la barra: brotan
+  // desde detrás de su borde.
+  html[data-intro="grow"] .site-header {
+    z-index: 1;
+  }
+
+  html[data-intro="grow"] main {
+    position: relative;
+    z-index: 2;
+  }
+
+  // Los botones reales son las gotas: la barra solo enseña su fondo al final.
+  html[data-intro="grow"] .site-header {
+    background: transparent;
+  }
+
+  html[data-intro="settle"] .site-header {
+    animation: rail-in 0.5s ease-out both;
+  }
+}
+
+@keyframes rail-in {
+  from {
+    background-color: transparent;
+  }
+}
+
+// Calendario: número de franjas -> filas de la cuadrícula (sin estilos en línea).
+@for $n from 1 through 8 {
+  .cal__wrap[data-rows="#{$n}"] {
+    --rows: #{$n};
+    --span: #{$n + 1};
+  }
+}
+
+.list-demo:nth-child(1) .list-demo__line {
+  width: 72%;
+}
+
+.list-demo:nth-child(2) .list-demo__line {
+  width: 54%;
+}
+
+.list-demo:nth-child(3) .list-demo__line {
+  width: 84%;
+}
+
+// Medición de la maquetación final de la intro sin que llegue a verse.
+.intro-measure {
+  transition: none !important;
+}
+
+// Gota rezagada de los botones durante la intro (ver LiquidWipe).
+.goo-defs {
+  position: absolute;
+}
+
+.liquid-bud--rel {
+  position: relative;
+}
+
+.liquid-bud::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 50%;
+  background: inherit;
 }

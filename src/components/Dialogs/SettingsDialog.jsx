@@ -46,7 +46,7 @@ function SettingsDialog({ onClose }) {
       {user && (
         <div className="settings__group settings__account">
           <p>
-            <Avatar user={user} size="1.75rem" />{" "}
+            <Avatar user={user} size="sm" />{" "}
             Signed in as <strong>{user.name}</strong>
           </p>
           <IconButton label="Sign out" onClick={signOut}>

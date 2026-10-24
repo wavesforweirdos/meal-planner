@@ -74,7 +74,7 @@ function Layout({ views, view, dark, onToggleTheme, badge, account, children }) 
 
       <header className="site-header">
         <a className="brand" href={`#${views[0].id}`} aria-label="Meal planner, home" data-tip="Meal Planner">
-          <Logo size={48} />
+          <Logo />
         </a>
         <nav aria-label="Views">
           <ul>
