@@ -1,99 +1,121 @@
-import { createContext, useState, useEffect } from "react";
-import { options, querySearchRecipe, defaultRecipeBook } from "../data";
+import { createContext, useMemo, useState } from "react";
+import { options, buildSearchUrl, defaultRecipeBook } from "../data";
+import { loadApiKey, saveApiKey } from "../utils/apiKey";
+import { DIETS, matchesMeal } from "../utils/recipe";
+import { useFavorites } from "../utils/useFavorites";
 
 export const RecipeContext = createContext();
 
-export function RecipeContextProvider(props) {
-  const [stateModal, setStateModal] = useState({ state: false, recipe: null });
+export function RecipeContextProvider({ children }) {
   const [data, setData] = useState(defaultRecipeBook);
+  const [detailRecipe, setDetailRecipe] = useState(null);
+  const [recipeToAdd, setRecipeToAdd] = useState(null);
 
-  //------------------- Paginate functions -------------------//
+  //------------------- Filters -------------------//
 
-  const [page, setPage] = useState(0);
-  const recipesPerPage = 9;
-  const numberOfRecipesVistited = page * recipesPerPage;
-  const totalPages = data ? Math.ceil(data.length / recipesPerPage) : 0;
+  const [mealFilter, setMealFilter] = useState("all");
+  const [dietFilters, setDietFilters] = useState([]);
+  const [favOnly, setFavOnly] = useState(false);
+  const favourites = useFavorites();
 
-  const displayRecipes = data
-    ? data.slice(
-        numberOfRecipesVistited,
-        numberOfRecipesVistited + recipesPerPage
-      )
-    : [];
-
-  const changePage = ({ selected }) => {
-    setPage(selected);
+  const chooseMeal = (id) => {
+    setMealFilter(id);
   };
 
-  //------------------- Search functions -------------------//
+  const toggleDiet = (id) => {
+    setDietFilters((current) =>
+      current.includes(id) ? current.filter((d) => d !== id) : [...current, id]
+    );
+  };
 
+  const filtered = useMemo(
+    () =>
+      (favOnly ? favourites : data).filter(
+        (recipe) =>
+          (mealFilter === "all" || matchesMeal(recipe, mealFilter)) &&
+          dietFilters.every((id) => DIETS.find((d) => d.id === id)?.test(recipe))
+      ),
+    [data, favOnly, favourites, mealFilter, dietFilters]
+  );
+
+  const displayRecipes = filtered;
+
+  //------------------- Search -------------------//
+
+  const [apiKey, setApiKey] = useState(loadApiKey);
+  const [searchNotice, setSearchNotice] = useState("");
+
+  const updateApiKey = (key) => {
+    const clean = key.trim();
+    setApiKey(clean);
+    saveApiKey(clean);
+    setSearchNotice("");
+    setData(defaultRecipeBook);
+  };
+
+  const searchLocal = (query) =>
+    defaultRecipeBook.filter((recipe) =>
+      recipe.title.toLowerCase().includes(query.toLowerCase())
+    );
+
+  // Sin clave busca en las recetas de ejemplo; con clave consulta Spoonacular
+  // y, si falla (clave no válida o cuota agotada), vuelve a las de ejemplo.
   async function searchRecipes(query) {
-    const url = querySearchRecipe + query;
+    if (!apiKey) {
+      setSearchNotice("");
+      setData(searchLocal(query));
+      return;
+    }
     try {
-      const res = await fetch(url, options);
-      if (!res.ok) {
-        setData(defaultRecipeBook);
-        setData(
-          data.filter((recipe) => {
-            if (recipe.title.toLowerCase().includes(query.toLowerCase())) {
-              return recipe;
-            }
-          })
-        );
-        const message = `An error has occured: ${res.status}. ${res.statusText}`;
-        throw new Error(message);
-      } else {
-        const data = await res.json();
-        setData(data.results);
-      }
+      const res = await fetch(buildSearchUrl(apiKey, query), options);
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`.trim());
+      const json = await res.json();
+      setSearchNotice("");
+      setData(json.results);
     } catch (err) {
-      console.log(err.message);
+      setSearchNotice(
+        `Spoonacular did not respond (${err.message}). Showing the sample recipes instead.`
+      );
+      setData(searchLocal(query));
     }
   }
 
+  // Busca una receta por id entre los resultados actuales y las de ejemplo (arrastrar y soltar).
+  const findRecipe = (id) =>
+    data.find((r) => r.id === id) ?? defaultRecipeBook.find((r) => r.id === id);
+
   function resetData() {
+    setSearchNotice("");
     setData(defaultRecipeBook);
   }
-
-  //------------------- Modal functions -------------------//
-  const showModal = (recipe) => {
-    setStateModal({ state: true, recipe: recipe });
-  };
-
-  const hideModal = () => {
-    setStateModal({ state: false, recipe: null });
-  };
-
-  //------------------- KeyDown functions -------------------//
-  useEffect(() => {
-    const keyDownHandler = (event) => {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        hideModal();
-        resetData();
-      }
-    };
-    document.addEventListener("keydown", keyDownHandler);
-    return () => {
-      document.removeEventListener("keydown", keyDownHandler);
-    };
-  }, []);
 
   return (
     <RecipeContext.Provider
       value={{
-        data,
-        totalPages,
         displayRecipes,
-        changePage,
+        searchResults: data,
+        findRecipe,
+        resultCount: filtered.length,
+        mealFilter,
+        chooseMeal,
+        favOnly,
+        toggleFavOnly: () => setFavOnly((v) => !v),
+        dietFilters,
+        toggleDiet,
         searchRecipes,
         resetData,
-        stateModal,
-        showModal,
-        hideModal,
+        apiKey,
+        updateApiKey,
+        searchNotice,
+        detailRecipe,
+        openDetail: setDetailRecipe,
+        closeDetail: () => setDetailRecipe(null),
+        recipeToAdd,
+        openAdd: setRecipeToAdd,
+        closeAdd: () => setRecipeToAdd(null),
       }}
     >
-      {props.children}
+      {children}
     </RecipeContext.Provider>
   );
 }
