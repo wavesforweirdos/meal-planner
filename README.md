@@ -14,6 +14,8 @@ Three views, one at a time, without scrolling between sections: **Plan** (the we
 ## Features
 
 - Public home and recipe book: anyone can browse and filter recipes. The planner, shopping list and favourites only appear after signing in, and each account keeps its own data on the device
+- Welcome intro on a first visit (or when you have never signed in): the animated rabbit mascot plays for four seconds on the gradient panel, then the sidebar buttons bud out of the panel's edge as liquid drops, each on its own path and timing (a CSS/SVG goo effect; it is skipped with `prefers-reduced-motion` and on phones)
+- Brand: logo and loader are alpha masks, so one set of images follows the light and dark themes. Logo variants (face only, full mascot, horizontal wordmark) and sizes are chosen with props on the `Logo` component
 - Sign in with Google or email through [Firebase Auth](https://firebase.google.com/docs/auth) (see "Sign-in setup" below). Without Firebase configuration the app runs in a demo mode with local, device-only profiles
 - Shared plans: share the week and the shopping list with a link; everyone who joins edits the same plan and sees changes live. With Firebase it syncs between devices (Firestore, rules in `firestore.rules`); without it, demo mode syncs between tabs of the same browser. Leaving keeps your own copy
 - Favourites: mark recipes with the heart and filter the Recipes view to show only them
@@ -43,7 +45,7 @@ Three views, one at a time, without scrolling between sections: **Plan** (the we
 | **Framework** | [React 19](https://react.dev/) |
 | **Build tool** | [Vite 8](https://vite.dev/) |
 | **Data** | [Spoonacular API](https://spoonacular.com/food-api) via `fetch` |
-| **Styling** | [Sass](https://sass-lang.com/) with design tokens, [Manrope](https://fontsource.org/fonts/manrope) |
+| **Styling** | [Sass](https://sass-lang.com/) with design tokens, [Manrope](https://fontsource.org/fonts/manrope); no inline styles (variants live in classes and `data-*` attributes) |
 | **Quality** | [CodeFactor](https://www.codefactor.io/) |
 | **CI/CD** | GitHub Actions and GitHub Pages |
 
